@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<!-- <div class="jumbotron"> -->
+	<div class="container">
+		<div class="nav">
+			<form action="{{url_for('search')}}" id="form" action="." method="POST">
+				<div class = "inputBox">
+	            	<input type="text" name="key_word" placeholder="" size ="30" value="{{ query }}"> 
+
+		    	    <button class="btn btn-primary btn-info" type="submit" role="button">birdy</button>
+		    	</div>
+		  	</form>
+	    </div>
+	    <br>
+	    <div class="wrapper">
+			<div class="sidebar">
+				<!-- <b>Filters</b> -->
+				<form action="{{url_for('search')}}" id="form" action="." method="POST">
+					<select name="language_f">
+						<option value="" selected disabled hidden>language</option>
+						<option value="eng">english</option>
+						<option value="es">spanish</option>
+						<option value="hi">hindi</option>
+						<option value="fr">french</option>
+						<option value="th">thai</option>
+					</select>
+					<br><br>
+					<select name="city_f">
+						<option value="" selected disabled hidden>city</option>
+						<option value="nyc">nyc</option>
+						<option value="mexico">mexico city</option>
+						<option value="delhi">delhi</option>
+						<option value="paris">paris</option>
+						<option value="bangkok">bangkok</option>
+					</select>
+					<br><br>
+					from:<br>
+					<input type="date" name="date_from">
+					<br>to:<br>
+					<input type="date" name="date_to">
+					<br><br>
+					<p><button class="btn btn-primary" type="submit" role="button">filter</button> </p>
+				</form>
+			</div>
+			<div class="body">
+				docs
+			</div>
+		</div>
+	</div>
+<!-- </div> -->
+{% endblock %}

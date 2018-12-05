@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<!-- <div class="jumbotron">
+ -->	<div class="container">
+        <h1><b>bird babble</b></h1>
+          <h2>what birds talk about</h2>
+          <form action="{{url_for('search')}}" id="form" action="." method="POST">
+            <div class = "inputBox">
+              <input type="text" name="key_word" placeholder="" size = "30"><br><br>
+            </div>
+            <p><button class="btn btn-primary btn-lg" type="submit" role="button">birdy</button> </p>
+          </form>
+	</div>
+<!-- </div> -->
+{% endblock %}

@@ -1,0 +1,61 @@
+html {
+    height: 100%;
+    overflow: hidden;
+}
+body {
+    background:linear-gradient(to bottom, #33ffbb, white);
+    border: 1px;
+    height: 100%;
+    overflow: hidden;
+}
+
+
+/*.container{
+    background:linear-gradient(to bottom, #33ffbb, white);
+}*/
+
+.jumbotron {
+	/*background: linear-gradient(to bottom, #33ffbb, white); /*#FF8C00 #124173*/*/
+	color: white;
+	text-align: center;
+	font-size: small;
+    height: 100vh;
+    display: flex;
+    font-family: Helvetica, SansSerif;
+}
+
+.jumbotron p {
+	color: white;
+	font-size: 26px;
+}
+
+.btn-primary {
+	background-color: #99ffdd;
+    border-color: white;
+}
+
+.btn-primary:hover {
+    background-color: #3AEAD8;
+    border-color: white;
+}
+
+.inputBox {
+	color: #0f0f0f;
+    width: 500px;
+}
+
+h1 {
+    text-align: center;
+    font-size: 75px;
+    color: #9AA7A6;
+}
+
+h2 {
+    text-align: center;
+    font-size: 35px;
+}
+
+.sidebar {
+    float: left;
+    width: 250px;
+}
