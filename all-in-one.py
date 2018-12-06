@@ -214,7 +214,7 @@ if __name__ == '__main__':
     timeline = visual.timeline()
     tagcloud = visual.tagcloud()
     density, pie = visual.sentiment()
-    map = visual.setMap()
+    heatmap = visual.setMap()
 
     # analysis_fig = visual.fig
 
