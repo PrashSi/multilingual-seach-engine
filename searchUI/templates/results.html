@@ -1,0 +1,25 @@
+{% for i in range(results|length) %}
+	{% set tweet = results[i] %}
+	{% set text = 'tweet_' + tweet['tweet_lang'] %}
+	<a href="https://twitter.com">{{ tweet[text] }}</a>
+	{% if tweet['mentions'] %}
+		<br>mentions:
+		{% for user in tweet['mentions'] %}
+			{% set userL = "https://twitter.com/" + user %}
+			<a href="{{ userL }}">@{{ user }}</a>
+		{% endfor %}
+	{% endif %}
+	
+	{% if tweet['hashtags'] %}
+		<br>hashtags: 
+		{% for hash in tweet['hashtags'] %}
+			{% set hashL = "https://twitter.com/hashtag/" + hash %}
+			<a href="{{ hashL }}">#{{ hash }}</a>
+		{% endfor %}
+	{% endif %}
+	<br><br>
+{% endfor %}
+
+{% for key in filters %}
+	{{ filters[key] }} <br>
+{% endfor %}
