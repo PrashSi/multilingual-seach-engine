@@ -7,7 +7,6 @@ import numpy as np
 from datetime import datetime
 import seaborn as sns
 from wordcloud import WordCloud
-from textblob import TextBlob
 sns.set()
 
 
@@ -20,6 +19,8 @@ class visualize:
         self.fig_path = os.path.join(os.getcwd(), fig_path)
         if not os.path.isdir(self.fig_path):
             os.makedirs(self.fig_path)
+        self.fig = plt.figure(figsize=(30, 10))
+        plt.tight_layout()
 
     def timeline(self):
         timetable = np.zeros((5, 15))
@@ -41,33 +42,35 @@ class visualize:
         N = timetable.shape[1]
         ind = np.arange(N)
         width = 0.4
-        p = [plt.bar(ind, timetable[0], width)[0]]
+        ax = self.fig.add_subplot(231)
+        p = [ax.bar(ind, timetable[0], width)[0]]
         for i in range(4):
             p.append(plt.bar(ind, timetable[i + 1], width, bottom=np.sum(timetable[0:i + 1], axis=0))[0])
 
-        plt.ylabel('Topic Counts', fontsize=10)
-        plt.xlabel('Week Range \n (From 2018-09-01 To 2018-11-30)', fontsize=10)
-        plt.title('Topic Timeline', fontsize=15)
-        plt.xticks(ind, range(1, N + 1))
-        plt.yticks(np.arange(0, np.max(timetable) + 2))
-        plt.legend(p, list(self.topics_item.keys()), loc=0)
-        plt.savefig(os.path.join(self.fig_path, 'timeline.png'), dpi=500, bbox_inches='tight')
-        plt.close()
+        ax.set_ylabel('Topic Counts', fontsize=10)
+        ax.set_xlabel('Week Range \n (From 2018-09-01 To 2018-11-30)', fontsize=10)
+        ax.set_title('Topic Timeline', fontsize=15)
+        ax.set_xticks(ind, range(1, N + 1))
+        ax.set_yticks(np.arange(0, np.max(timetable) + 2))
+        ax.legend(p, list(self.topics_item.keys()), loc=0)
+        # plt.savefig(os.path.join(self.fig_path, 'timeline.png'), dpi=500, bbox_inches='tight')
 
-    def lang_field(self, tweet):
-        lan_keys = tweet.keys()
-        if 'tweet_en' in lan_keys:
-            return tweet['tweet_en']
-        elif 'tweet_hi' in lan_keys:
-            return tweet['tweet_hi']
-        elif 'tweet_th' in lan_keys:
-            return tweet['tweet_th']
-        elif 'tweet_fr' in lan_keys:
-            return tweet['tweet_fr']
-        elif 'tweet_fr' in lan_keys:
-            return tweet['tweet_es']
-        else:
-            return tweet['tweet_text']
+        return ax
+
+    # def lang_field(self, tweet):
+    #     lan_keys = tweet.keys()
+    #     if 'tweet_en' in lan_keys:
+    #         return tweet['tweet_en']
+    #     elif 'tweet_hi' in lan_keys:
+    #         return tweet['tweet_hi']
+    #     elif 'tweet_th' in lan_keys:
+    #         return tweet['tweet_th']
+    #     elif 'tweet_fr' in lan_keys:
+    #         return tweet['tweet_fr']
+    #     elif 'tweet_fr' in lan_keys:
+    #         return tweet['tweet_es']
+    #     else:
+    #         return tweet['tweet_text']
 
     def tagcloud(self):
         text = ''
@@ -75,13 +78,16 @@ class visualize:
             lines = f.readlines()[0]
             tweets = json.loads(lines)
             for tweet in tweets:
-                text = text + self.lang_field(tweet)
+                text = text + tweet['tweet_'+tweet['tweet_lang']]
 
         wordcloud = WordCloud().generate(text)
         wordcloud.background_color = 'white'
-        plt.imshow(wordcloud, interpolation='bilinear', )
+        ax = self.fig.add_subplot(232)
+        ax.imshow(wordcloud, interpolation='bilinear', )
         plt.axis("off")
         plt.savefig(os.path.join(self.fig_path, 'tagcloud.png'), dpi=400)
+        return ax
+
 
     def sentiment(self):
         tweets = []
@@ -98,19 +104,17 @@ class visualize:
 
                 # saving text of tweet
                 parsed_tweet['text'] = tweet['tweet_text']
-                tweet_lang = self.lang_field(tweet)
-                parsed_tweet['x_score'] = TextBlob(tweet_lang).sentiment.polarity
-                parsed_tweet['y_score'] = TextBlob(tweet_lang).sentiment.subjectivity
+                parsed_tweet['score'] = tweet['score']
 
-                if parsed_tweet['x_score'] > 0:
+                if parsed_tweet['score'] > 0:
                     parsed_tweet['sentiment'] = 'positive'
-                elif parsed_tweet['x_score'] < 0:
+                elif parsed_tweet['score'] < 0:
                     parsed_tweet['sentiment'] = 'negative'
                 else:
                     parsed_tweet['sentiment'] = 'neutral'
 
                 tweets.append(parsed_tweet)
-        self.gen_plot(tweets)
+        return self.gen_plot(tweets)
 
     def gen_plot(self, tweets):
         ptweets = [tweet for tweet in tweets if tweet['sentiment'] == 'positive']
@@ -119,33 +123,29 @@ class visualize:
         ntweets_num = 100 * len(ntweets) / len(tweets)
         netweets_num = 100 * (len(tweets) - len(ntweets) - len(ptweets)) / len(tweets)
 
-
         sizes = [ptweets_num, ntweets_num, netweets_num]
-        plt.figure()
-        plt.title('Sentiment Chart')
-        plt.pie(sizes, labels=self.labels, autopct='%1.1f%%', startangle=90)
-        plt.savefig(os.path.join(self.fig_path, 'pie.png'), bbox_inches='tight', dpi=500)
-        plt.close()
+        ax1 = self.fig.add_subplot(233)
+        ax1.set_title('Sentiment Chart')
+        ax1.pie(sizes, labels=self.labels, autopct='%1.1f%%', startangle=90)
+        # plt.savefig(os.path.join(self.fig_path, 'pie.png'), bbox_inches='tight', dpi=500)
 
-        x_score = []
-        y_score = []
+        score = []
         for tweet in tweets:
-            x_score.append(tweet['x_score'])
-            y_score.append(tweet['y_score'])
-        plt.figure()
-        sns.distplot(x_score, rug=True, hist=True)
-        plt.title('Sentiment Distribution', fontsize=15)
-        plt.xlim(-1.0, 1.0)
-        plt.ylabel('Density')
-        plt.xlabel('Negative $\longrightarrow$-------------Neutral--------------$\longrightarrow$ Positive')
-        plt.savefig(os.path.join(self.fig_path, 'density.png'), bbox_inches='tight', dpi=500)
-        plt.close()
+            score.append(tweet['score'])
+        ax2 = self.fig.add_subplot(234)
+        sns.distplot(score, rug=True, hist=True)
+        # ax2.set_title('Sentiment Distribution', fontsize=15)
+        ax2.set_xlim(-1.0, 1.0)
+        ax2.set_ylabel('Density')
+        ax2.set_xlabel('Negative $\longrightarrow$-------------Neutral--------------$\longrightarrow$ Positive')
+        # plt.savefig(os.path.join(self.fig_path, 'density.png'), bbox_inches='tight', dpi=500)
+        return ax1, ax2
 
 
     def setMap(self):
         # --- Save Countries, Latitudes and Longitudes ---
         pais, lats, lons = [], [], []
-
+        ax = self.fig.add_subplot(235, projection=ccrs.PlateCarree(central_longitude=0.0))
         with open(self.json_file) as f:
             lines = f.readlines()[0]
             tweets = json.loads(lines)
@@ -154,15 +154,11 @@ class visualize:
                 ct += 1
                 if ct > 1000:
                     break
-                # lon = tweet['tweet_loc'][1]
-                # lat = tweet['tweet_loc'][0]
-                # lats.append(lat)
-                # lons.append(lon)
                 pais.append(tweet['country'])
-        #count the number of times a country is in the list
+
+        # count the number of times a country is in the list
         unique_pais = set(pais)
         unique_pais = list(unique_pais)
-        print(unique_pais)
         c_numero = []
         for p in unique_pais:
             c_numero.append(pais.count(p))
@@ -175,8 +171,7 @@ class visualize:
         test = 0
         shapename = 'admin_0_countries'
         countries_shp = shpreader.natural_earth(resolution='110m',
-                                                category='cultural', name=shapename)
-        ax = plt.axes(projection=ccrs.PlateCarree(central_longitude=0.0))
+                                          category='cultural', name=shapename)
         ax.coastlines(resolution='110m', color='grey', linewidth=0.3)
         ax.add_feature(cfeature.BORDERS, facecolor='none', edgecolor='k', linewidth=0.2)
         ax.add_feature(cfeature.LAKES, facecolor='#BAECFA', linewidth=0.2)
@@ -197,15 +192,23 @@ class visualize:
                                   facecolor='#FAFAFA',
                                   label=nome)
         if test != len(unique_pais):
-            print("check the way you are writting your country names!")
+            raise Exception("check the way you are writting your country names!")
 
         plt.savefig(os.path.join(self.fig_path, 'heatmap.png'), bbox_inches='tight', dpi=400)
-        plt.close()
+        return ax
 
 
 if __name__ == '__main__':
     visual = visualize('new.json', 'figs')
-    visual.setMap()
-    visual.timeline()
-    visual.tagcloud()
-    visual.sentiment()
+
+    timeline = visual.timeline()
+    tagcloud = visual.tagcloud()
+    density, pie = visual.sentiment()
+    map = visual.setMap()
+    
+    # this is what you want
+    analysis_fig = visual.fig
+
+    # plt.savefig('analysis.png')
+    # plt.show()
+    # plt.close()
