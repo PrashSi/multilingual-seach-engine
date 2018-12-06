@@ -1,16 +1,21 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<!-- <div class="jumbotron">
- -->	<div class="container">
-        <h1><b>bird babble</b></h1>
-          <h2>what birds talk about</h2>
+  <br><br><br><br><br><br><br>
+  <div class="container">
+        <h1><b>bird babble</b></h1><br><br>
           <form action="{{url_for('search')}}" id="form" action="." method="POST">
-            <div class = "inputBox">
-              <input type="text" name="key_word" placeholder="" size = "30"><br><br>
-            </div>
-            <p><button class="btn btn-primary btn-lg" type="submit" role="button">birdy</button> </p>
+              <div class = "inputBox">
+                <input type="text" name="key_word" placeholder="" size = "70"><br><br>
+                <input type="hidden" name="lang_f" value="">
+                <input type="hidden" name="topic_f" value="">
+                <input type="hidden" name="city_f" value="">
+                <input type="hidden" name="date_f1" value="">
+                <input type="hidden" name="date_f2" value="">
+                <input type="hidden" name="facet_f" value="">
+                <br>
+                <button class="btn btn-primary btn-lg" type="submit" role="button">fetch</button>
+              </div>
           </form>
 	</div>
-<!-- </div> -->
 {% endblock %}

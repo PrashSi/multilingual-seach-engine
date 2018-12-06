@@ -1,8 +1,11 @@
 from flask import Flask, abort, redirect, render_template, request
 from html import escape
 from werkzeug.exceptions import default_exceptions, HTTPException
+import json
+# import all_in_one
 
 app = Flask(__name__)
+
 
 @app.after_request
 def after_request(response):
@@ -18,8 +21,23 @@ def index():
 
 @app.route("/search", methods=["POST"])
 def search():
-	query = request.form['key_word']
-	return render_template("search.html", query = query)
+    with open("new.json", 'rb') as f:
+        data = json.load(f)
+    query = request.form['key_word']
+    lang = request.form['lang_f']
+    topic = request.form['topic_f']
+    city = request.form['city_f']
+    date_s = request.form['date_f1']
+    date_e = request.form['date_f2']
+    facet = request.form['facet_f']
+    filters = {'query': query, 'lang_f': lang, 'topic_f': topic, 
+            'city_f': city, 'date_f1': date_s, 'date_f2': date_e, 'facet_f': facet}
+    # results = solr_search(filters)
+    # results = all_in_one()
+    results, analytics = data, []
+    return render_template("search.html", query=query, filters=filters, 
+                            results=results, analytics=analytics)
+
 
 @app.errorhandler(HTTPException)
 def errorhandler(error):

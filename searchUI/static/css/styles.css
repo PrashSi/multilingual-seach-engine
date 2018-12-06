@@ -1,0 +1,124 @@
+html {
+    height: 100%;
+    overflow: hidden;
+}
+body {
+    background:#f0f8ff;
+/*linear-gradient(to top, #0c9dfd, white);*/
+    border: 1px;
+    height: 100%;
+    overflow: hidden;
+}
+
+
+/*.group:before,
+.group:after {
+  content: "";
+  display: table;
+}
+.group:after {
+  clear: both;
+}
+.group {
+  clear: both;
+  *zoom: 1;
+}*/
+
+.active {
+  background: rgba(255,255,255,1);
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 12px;
+}
+
+.column {
+  float: left;
+  width: 33.33%;
+  padding: 5px;
+}
+
+/* Clear floats after image containers */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.nav-tabs {
+   margin: auto 140px;
+}
+
+.tab-content {
+    background: rgba(255,255,255,1);
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-radius: 12px;
+}
+
+aside {
+    float:left;
+
+    margin: 0 1.5%;
+    width: 15%;
+}
+
+section {
+  float: left;
+  margin: 0 1.5%;
+  width: 53%;
+  border-radius: 12px;
+}
+
+
+
+.jumbotron {
+	background: rgba(255,255,255,1);
+	text-align: center;
+	font-size: small;
+    border-radius: 12px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    font-family: Helvetica, SansSerif;
+}
+
+
+.jumbotron p {
+	color: white;
+	font-size: 26px;
+}
+
+.btn-group {
+    margin: auto 10px;
+}
+
+.btn-primary {
+	background-color: #0c9dfd;
+    margin: auto 10px;
+    font-family: Helvetica, SansSerif;
+    font-weight: bold;
+}
+
+.btn-primary:hover {
+    background-color: #0289e3;
+    border-color: white;
+}
+
+.inputBox {
+	color: #0f0f0f;
+    width: 1000px;
+    text-align: center;
+}
+
+h1 {
+    text-align: center;
+    font-size: 75px;
+    color: #9AA7A6;
+}
+
+h2 {
+    text-align: center;
+    color:  #9AA7A6;
+    font-size: 40px;
+}
+
