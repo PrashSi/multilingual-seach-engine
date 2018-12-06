@@ -19,8 +19,8 @@ class visualize:
         self.fig_path = os.path.join(os.getcwd(), fig_path)
         if not os.path.isdir(self.fig_path):
             os.makedirs(self.fig_path)
-        self.fig = plt.figure(figsize=(30, 10))
-        plt.tight_layout()
+        # self.fig = plt.figure(figsize=(30, 10))
+        # plt.tight_layout()
 
     def timeline(self):
         timetable = np.zeros((5, 15))
@@ -42,7 +42,9 @@ class visualize:
         N = timetable.shape[1]
         ind = np.arange(N)
         width = 0.4
-        ax = self.fig.add_subplot(231)
+        # ax = self.fig.add_subplot(231)
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
         p = [ax.bar(ind, timetable[0], width)[0]]
         for i in range(4):
             p.append(plt.bar(ind, timetable[i + 1], width, bottom=np.sum(timetable[0:i + 1], axis=0))[0])
@@ -53,7 +55,7 @@ class visualize:
         ax.set_xticks(ind, range(1, N + 1))
         ax.set_yticks(np.arange(0, np.max(timetable) + 2))
         ax.legend(p, list(self.topics_item.keys()), loc=0)
-        # plt.savefig(os.path.join(self.fig_path, 'timeline.png'), dpi=500, bbox_inches='tight')
+        plt.savefig(os.path.join(self.fig_path, 'timeline.png'), dpi=500, bbox_inches='tight')
 
         return ax
 
@@ -82,7 +84,9 @@ class visualize:
 
         wordcloud = WordCloud().generate(text)
         wordcloud.background_color = 'white'
-        ax = self.fig.add_subplot(232)
+        # ax = self.fig.add_subplot(232)
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
         ax.imshow(wordcloud, interpolation='bilinear', )
         plt.axis("off")
         plt.savefig(os.path.join(self.fig_path, 'tagcloud.png'), dpi=400)
@@ -124,28 +128,34 @@ class visualize:
         netweets_num = 100 * (len(tweets) - len(ntweets) - len(ptweets)) / len(tweets)
 
         sizes = [ptweets_num, ntweets_num, netweets_num]
-        ax1 = self.fig.add_subplot(233)
+        # ax1 = self.fig.add_subplot(233)
+        fig1 = plt.figure()
+        ax1 = fig1.add_subplot(111)
         ax1.set_title('Sentiment Chart')
         ax1.pie(sizes, labels=self.labels, autopct='%1.1f%%', startangle=90)
-        # plt.savefig(os.path.join(self.fig_path, 'pie.png'), bbox_inches='tight', dpi=500)
+        plt.savefig(os.path.join(self.fig_path, 'pie.png'), bbox_inches='tight', dpi=500)
 
         score = []
         for tweet in tweets:
             score.append(tweet['score'])
-        ax2 = self.fig.add_subplot(234)
+        # ax2 = self.fig.add_subplot(234)
+        fig2 = plt.figure()
+        ax2 = fig2.add_subplot(111)
         sns.distplot(score, rug=True, hist=True)
         # ax2.set_title('Sentiment Distribution', fontsize=15)
         ax2.set_xlim(-1.0, 1.0)
         ax2.set_ylabel('Density')
         ax2.set_xlabel('Negative $\longrightarrow$-------------Neutral--------------$\longrightarrow$ Positive')
-        # plt.savefig(os.path.join(self.fig_path, 'density.png'), bbox_inches='tight', dpi=500)
+        plt.savefig(os.path.join(self.fig_path, 'density.png'), bbox_inches='tight', dpi=500)
         return ax1, ax2
 
 
     def setMap(self):
         # --- Save Countries, Latitudes and Longitudes ---
         pais, lats, lons = [], [], []
-        ax = self.fig.add_subplot(235, projection=ccrs.PlateCarree(central_longitude=0.0))
+        # ax = self.fig.add_subplot(235, projection=ccrs.PlateCarree(central_longitude=0.0))
+        fig = plt.figure()
+        ax = fig.add_subplot(111,projection=ccrs.PlateCarree(central_longitude=0.0))
         with open(self.json_file) as f:
             lines = f.readlines()[0]
             tweets = json.loads(lines)
@@ -205,9 +215,8 @@ if __name__ == '__main__':
     tagcloud = visual.tagcloud()
     density, pie = visual.sentiment()
     map = visual.setMap()
-    
-    # this is what you want
-    analysis_fig = visual.fig
+
+    # analysis_fig = visual.fig
 
     # plt.savefig('analysis.png')
     # plt.show()
