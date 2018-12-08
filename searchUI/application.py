@@ -7,6 +7,7 @@ import re
 import datetime
 from textblob import TextBlob
 import fetch_results
+import matplotlib.pyplot as plt, mpld3
 
 app = Flask(__name__)
 
@@ -59,13 +60,15 @@ def search():
 
     # results = []
     results = fetch_results.search(filters)
-    visual = all_in_one.visualize('new.json', 'figs')
-    density, pie = visual.sentiment()
+    visual = all_in_one.visualize(results, 'figs')
+    # pie_data = visual.sentiment()
+    pie_data = [5, 1, 5]
     # analytics = {'timeline': visual.timeline(), 'tagcloud': visual.tagcloud(), 
                 # 'density': density, 'pie': pie, 'heatmap': visual.setMap()}
     analytics = []
     return render_template("search.html", query=query, filters=filters, 
-                            results=results['docs'], analytics=analytics, sp_corr = spelling(query))
+                            results=results['docs'], analytics=analytics, sp_corr = spelling(query),
+                            pie_data = pie_data)
 
 
 @app.errorhandler(HTTPException)

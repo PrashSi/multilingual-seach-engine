@@ -1,7 +1,7 @@
 import json, os
 import cartopy.crs as ccrs
 import cartopy.io.shapereader as shpreader
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt, mpld3
 import cartopy.feature as cfeature
 import numpy as np
 from datetime import datetime
@@ -109,7 +109,7 @@ class visualize:
                 # saving text of tweet
                 parsed_tweet['text'] = tweet['tweet_text']
                 # parsed_tweet['score'] = tweet['score']
-                parsed_tweet['score'] = str(np.random.normal(0, 1, (1, )))
+                parsed_tweet['score'] = np.random.normal(0, 1, (1, ))
 
                 if parsed_tweet['score'] > 0:
                     parsed_tweet['sentiment'] = 'positive'
