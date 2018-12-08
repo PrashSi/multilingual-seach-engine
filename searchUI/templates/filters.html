@@ -47,16 +47,16 @@
 	  <option value="paris">Paris</option>
 	  <option value="bangkok">Bangkok</option>
 	</select>
-	<br><br>
 
-	<select name="facet_f">
+<!--	<br><br>
+ 	<select name="facet_f">
 	  <option value="" selected disabled hidden>Facet</option>
 	  <option value="en">English</option>
 	  <option value="es">Spansih</option>
 	  <option value="hi">Hindi</option>
 	  <option value="fr">French</option>
 	  <option value="th">Thai</option>
-	</select>
+	</select> -->
 <!-- 	<div class="btn-group">
 		<button class="btn btn-primary dropdown-toggle"  name="lang_f" type="submit" data-toggle="dropdown">Language
 		<span class="caret"></span></button>
@@ -123,6 +123,8 @@
 	<br><br>
 
 	<input type="hidden" name="lang_f" value="{{ lang_f }}">
+	<input type="hidden" name="topic_f" value="{{ topic_f }}">
+	<input type="hidden" name="city_f" value="{{ city_f }}">
 	<input type="hidden" name=key_word value="{{ query }}">
 	<button class="btn btn-primary" type="submit" role="button">filter</button>
 </form>

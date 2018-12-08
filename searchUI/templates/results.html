@@ -1,7 +1,12 @@
+{% if results|length == 0 %}
+	No results, please try another query
+{% endif %}
+
 {% for i in range(results|length) %}
 	{% set tweet = results[i] %}
-	{% set text = 'tweet_' + tweet['tweet_lang'] %}
-	<a href="https://twitter.com">{{ tweet[text] }}</a>
+	{% set source = "https://twitter.com/statuses/" + tweet['id'] %}
+
+	<a href="{{ source }}">{{ tweet['tweet_text'][0] }}</a>
 	{% if tweet['mentions'] %}
 		<br>mentions:
 		{% for user in tweet['mentions'] %}
@@ -19,9 +24,3 @@
 	{% endif %}
 	<br><br>
 {% endfor %}
-
-<!-- {% for key in filters %}
-	{{ key }} {{ filters[key] }}
-	 <br>
-	
-{% endfor %} -->

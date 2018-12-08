@@ -28,10 +28,10 @@ def formatDate(data):
 
 def search( query):
 
-	solr = 'http://localhost:8983/solr/IRF18P1/select?wt=json'
+	solr = 'http://18.222.230.12:8984/solr/IRF18P1/select?wt=json'
 
 	month_first = True
-	fl = 'tweet_lang source tweet_text topic city text tweet_date hashtags'
+	fl = 'id tweet_lang source tweet_text topic city text tweet_date hashtags'
 
 	
 	qfilter = query;

@@ -14,7 +14,6 @@
 		            <input type="hidden" name="city_f" value="">
 		            <input type="hidden" name="date_f1" value="">
 		            <input type="hidden" name="date_f2" value="">
-		            <input type="hidden" name="facet_f" value="">
 		    	    <button class="btn btn-primary btn-info" type="submit" role="button">fetch</button>
 		    	    {% if sp_corr != query %}
 		    	    	<br>
@@ -48,6 +47,9 @@
 					{% include "analytics.html" %}
 				</div>
 			</div>
+			{% for key in filters %}
+				{{ key }} {{ filters[key] }} <br>
+			{% endfor %}
 		</section>
 
 		<aside>
