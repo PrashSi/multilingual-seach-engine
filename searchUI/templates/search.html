@@ -8,13 +8,19 @@
 		<div class="nav">
 			<form action="{{url_for('search')}}" id="form" action="." method="POST">
 				<div class = "inputBox">
-	            	<input type="text" name="key_word" placeholder="" size ="50" value="{{ query }}"> 
+	            	<input type="text" name="key_word" placeholder="" size ="50" value="{{ query }}">
 	            	<input type="hidden" name="lang_f" value="">
 		            <input type="hidden" name="topic_f" value="">
 		            <input type="hidden" name="city_f" value="">
-		            <input type="hidden" name="date_f" value="">
+		            <input type="hidden" name="date_f1" value="">
+		            <input type="hidden" name="date_f2" value="">
 		            <input type="hidden" name="facet_f" value="">
 		    	    <button class="btn btn-primary btn-info" type="submit" role="button">fetch</button>
+		    	    {% if sp_corr != query %}
+		    	    	<br>
+		    	    	<input type="hidden" name="key_word" value="{{ sp_corr }}"> Did you mean: 
+		    	    	<button class="btn btn-info" type="submit" role="button">{{ sp_corr }}</button>
+		    	    {% endif %}
 		    	</div>
 		  	</form>
 	    </div>
@@ -30,94 +36,7 @@
 
 	<div class="group">
 		<aside>
-			<form action="{{url_for('search')}}" id="form" action="." method="POST">
-				{% if filters['lang_f'] == "" %}
-					{% set lang_f = "Language" %}
-				{% endif %}
-
-				{% if filters['topic_f'] == "" %}
-					{% set topic_f = "Topic" %}
-				{% endif %}
-
-				{% if filters['city_f'] == "" %}
-					{% set city_f = "City" %}
-				{% endif %}
-
-				{% if filters['date_f'] == "" %}
-					{% set date_f = "Date" %}
-				{% endif %}
-
-				{% if filters['facet_f'] == "" %}
-					{% set facet_f = "Facet" %}
-				{% endif %}
-				<div class="btn-group">
-					<button class="btn btn-primary dropdown-toggle"  name="lang_f" type="submit" data-toggle="dropdown">Language
-					<span class="caret"></span></button>
-					<ul id="lang_f" class="dropdown-menu">
-				      <input class="form-control" id="myInput" name="lang_f" type="text" placeholder="{{ lang_f }}">
-				      <input type="text" name="lang_f" value="English" placeholder="English">
-				      <li><a href="#">English</a></li>
-				      <li><a href="#">Spanish</a></li>
-				      <li><a href="#">Hindi</a></li>
-				      <li><a href="#">French</a></li>
-				      <li><a href="#">Thai</a></li>
-				    </ul>
-				</div>
-			    <br><br>
-
-			    <div class="btn-group">
-				    <button class="btn btn-primary dropdown-toggle"  name="topic_f" type="button" data-toggle="dropdown">Topic
-					<span class="caret"></span></button>
-					<ul id="topic_f" class="dropdown-menu">
-				      <input class="form-control" id="myInput" name="topic_f" type="text" placeholder="{{ topic_f }}">
-				      <li><a href="#">Politics</a></li>
-				      <li><a href="#">Crime</a></li>
-				      <li><a href="#">Environment</a></li>
-				      <li><a href="#">Infrastructure</a></li>
-				      <li><a href="#">Social Unrest</a></li>
-				    </ul>
-				</div>
-			    <br><br>
-
-			    <div class="btn-group">
-				    <button class="btn btn-primary dropdown-toggle"  name="city_f" type="button" data-toggle="dropdown">City
-					<span class="caret"></span></button>
-					<ul id="city_f" class="dropdown-menu">
-				      <input class="form-control" id="myInput" name="city_f" type="text" placeholder="{{ city_f }}">
-				      <li><a href="#">NYC</a></li>
-				      <li><a href="#">Mexico City</a></li>
-				      <li><a href="#">Delhi</a></li>
-				      <li><a href="#">Paris</a></li>
-				      <li><a href="#">Bangkok</a></li>
-				    </ul>
-				</div>
-			    <br><br>
-
-			    <div class="btn-group">
-				    <button class="btn btn-primary dropdown-toggle"  name="facet_f" type="button" data-toggle="dropdown">Facet
-					<span class="caret"></span></button>
-					<ul id="facet_f" class="dropdown-menu">
-				      <input class="form-control" id="myInput" name="facet_f" type="text" placeholder="{{ facet_f }}">
-				      <li><a href="#">NYC</a></li>
-				      <li><a href="#">Mexico City</a></li>
-				      <li><a href="#">Delhi</a></li>
-				      <li><a href="#">Paris</a></li>
-				      <li><a href="#">Bangkok</a></li>
-				    </ul>
-				</div>
-			    <br>
-
-			    <div class="btn-group">
-					<br>from:<br>
-					<input type="date" name="date_f1">
-					<br>to:<br>
-					<input type="date" name="date_f2">
-				</div>
-				<br><br>
-
-				<input type="hidden" name=key_word value="{{ query }}">
-				<button class="btn btn-primary" type="submit" role="button">filter</button>
-			</form>
+			{% include "filters.html" %}
 		</aside>
 
 		<section>

@@ -2,7 +2,12 @@ from flask import Flask, abort, redirect, render_template, request
 from html import escape
 from werkzeug.exceptions import default_exceptions, HTTPException
 import json
-# import all_in_one
+import all_in_one
+import re
+from textblob import TextBlob
+def spelling(input):
+    b = TextBlob(input)
+    return str(b.correct())
 
 app = Flask(__name__)
 
@@ -21,8 +26,12 @@ def index():
 
 @app.route("/search", methods=["POST"])
 def search():
+
     with open("new.json", 'rb') as f:
         data = json.load(f)
+
+    
+        
     query = request.form['key_word']
     lang = request.form['lang_f']
     topic = request.form['topic_f']
@@ -32,11 +41,17 @@ def search():
     facet = request.form['facet_f']
     filters = {'query': query, 'lang_f': lang, 'topic_f': topic, 
             'city_f': city, 'date_f1': date_s, 'date_f2': date_e, 'facet_f': facet}
+            
     # results = solr_search(filters)
-    # results = all_in_one()
-    results, analytics = data, []
+    results = data
+
+    visual = all_in_one.visualize('new.json', 'figs')
+    density, pie = visual.sentiment()
+    analytics = {'timeline': visual.timeline(), 'tagcloud': visual.tagcloud(), 
+                'density': density, 'pie': pie, 'heatmap': visual.setMap()}
+    # analytics = []
     return render_template("search.html", query=query, filters=filters, 
-                            results=results, analytics=analytics)
+                            results=results, analytics=analytics, sp_corr = spelling(query))
 
 
 @app.errorhandler(HTTPException)
