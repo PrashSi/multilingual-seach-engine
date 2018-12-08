@@ -3,13 +3,28 @@
 
 import json
 from datetime import datetime
-import urllib2
-import urllib
+
+import urllib.request
+import urllib.parse
 
 q = '' # free text filter.
 fq = '' # advance filters
 
-
+def formatDate(data):
+    date = data
+    time = date.split(':')
+    if int(time[1]) > 30 and int(time[1]) < 23:
+        hour = int(time[0]) + 1
+    else:
+        hour = int(time[0])
+    minute = 0
+    sec = 0
+    # month = list(calendar.month_abbr).index(date[1])
+    year = int(date[-1])
+    day = int(date[2])
+    d = datetime.datetime(year, month, day, hour, minute, sec)
+    date = '{:%Y-%m-%dT%H:%M:%SZ}'.format(d)
+    return date
 
 def search( query):
 
@@ -19,7 +34,7 @@ def search( query):
 	fl = 'tweet_lang source tweet_text topic city text tweet_date hashtags'
 
 	
-	qfilter = json.loads(query)
+	qfilter = query;
 	# free text
 	if qfilter['query']:
 		solr +=  '&q='+qfilter['query']
@@ -37,11 +52,10 @@ def search( query):
 	if qfilter['lang_f']:
 		solr +=  '&fq=tweet_lang:' + qfilter['lang_f']
 
-	# if qfilter['date_f']:
-	# 	format = '%m/%d/%Y' if month_first else '%d/%m/%Y'
-	# 	now = datetime.combine(datetime.strptime(qfilter['date_f'], format).date(), time())
-	# 	print now
-		# solr +=  '&fq=tweet_date:' + qfilter['date_f']
+	if qfilter['date_f1']:
+		solr +=  '&fq=tweet_date:' + urllib.parse.quote('[' +qfilter['date_f1'] +' TO ' + qfilter['date_f2'] + ']')
+
+
 	if qfilter['start']:
 		solr +=  '&start=' + qfilter['start']
 
@@ -49,11 +63,11 @@ def search( query):
 		solr +=  '&rows=' + qfilter['rows']
 	
 		# append the response set
-	fl = urllib.quote(fl)
+	fl = urllib.parse.quote(fl)
 	solr += '&fl='+fl
 	
-	print solr
-	result = urllib2.urlopen(solr)
+	print (solr)
+	result = urllib.request.urlopen(solr)
 
 	data =  json.load(result)['response']	
 	return data
@@ -61,7 +75,10 @@ def search( query):
 	# return json.load(result)['response']
 
 # call function like this
-data = search('{"query":"*", "topic_f":"politics" , "date_f":"07/27/2012" , "lang_f":"en" , "city_f":"nyc" , "start":"0" , "rows":"15"}' )
+
+dic = {'query': '', 'lang_f': 'en', 'topic_f': 'politics',
+           'city_f': 'nyc', 'date_f1':'2018-08-08T00:00:00Z' , 'date_f2': 'NOW', 'start':'0' , 'rows':'15'}
+data = search(dic)
 
 for dat in data['docs']:
-		print dat
+		print (dat)
