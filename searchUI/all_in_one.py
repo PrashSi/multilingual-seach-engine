@@ -108,7 +108,8 @@ class visualize:
 
                 # saving text of tweet
                 parsed_tweet['text'] = tweet['tweet_text']
-                parsed_tweet['score'] = tweet['score']
+                # parsed_tweet['score'] = tweet['score']
+                parsed_tweet['score'] = str(np.random.normal(0, 1, (1, )))
 
                 if parsed_tweet['score'] > 0:
                     parsed_tweet['sentiment'] = 'positive'
@@ -118,7 +119,13 @@ class visualize:
                     parsed_tweet['sentiment'] = 'neutral'
 
                 tweets.append(parsed_tweet)
-        return self.gen_plot(tweets)
+        ptweets = [tweet for tweet in tweets if tweet['sentiment'] == 'positive']
+        ntweets = [tweet for tweet in tweets if tweet['sentiment'] == 'negative']
+        ptweets_num = 100 * len(ptweets) / len(tweets)
+        ntweets_num = 100 * len(ntweets) / len(tweets)
+        netweets_num = 100 * (len(tweets) - len(ntweets) - len(ptweets)) / len(tweets)
+        return ptweets_num, ntweets_num, netweets_num
+        # return self.gen_plot(tweets)
 
     def gen_plot(self, tweets):
         ptweets = [tweet for tweet in tweets if tweet['sentiment'] == 'positive']
@@ -208,13 +215,13 @@ class visualize:
         return ax
 
 
-# if __name__ == '__main__':
-#     visual = visualize('new.json', 'figs')
+if __name__ == '__main__':
+    visual = visualize('new.json', 'figs')
 
-#     timeline = visual.timeline()
-#     tagcloud = visual.tagcloud()
-#     density, pie = visual.sentiment()
-#     heatmap = visual.setMap()
+    timeline = visual.timeline()
+    tagcloud = visual.tagcloud()
+    density, pie = visual.sentiment()
+    heatmap = visual.setMap()
 
     # analysis_fig = visual.fig
 
