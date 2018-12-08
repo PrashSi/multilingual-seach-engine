@@ -29,8 +29,6 @@ def search():
 
     with open("new.json", 'rb') as f:
         data = json.load(f)
-
-    
         
     query = request.form['key_word']
     lang = request.form['lang_f']
@@ -41,8 +39,8 @@ def search():
     facet = request.form['facet_f']
     filters = {'query': query, 'lang_f': lang, 'topic_f': topic, 
             'city_f': city, 'date_f1': date_s, 'date_f2': date_e, 'facet_f': facet}
-            
-    # results = solr_search(filters)
+
+    # results = solr_search(filtgers)
     results = data
 
     visual = all_in_one.visualize('new.json', 'figs')
