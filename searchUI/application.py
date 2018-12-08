@@ -5,15 +5,14 @@ import json
 import all_in_one
 import re
 import datetime
-
 from textblob import TextBlob
 import fetch_results
+
+app = Flask(__name__)
 
 def spelling(input):
     b = TextBlob(input)
     return str(b.correct())
-
-app = Flask(__name__)
 
 def formatDate(data):
     date = data.split('-')
