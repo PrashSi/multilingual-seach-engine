@@ -208,13 +208,13 @@ class visualize:
         return ax
 
 
-if __name__ == '__main__':
-    visual = visualize('new.json', 'figs')
+# if __name__ == '__main__':
+#     visual = visualize('new.json', 'figs')
 
-    timeline = visual.timeline()
-    tagcloud = visual.tagcloud()
-    density, pie = visual.sentiment()
-    heatmap = visual.setMap()
+#     timeline = visual.timeline()
+#     tagcloud = visual.tagcloud()
+#     density, pie = visual.sentiment()
+#     heatmap = visual.setMap()
 
     # analysis_fig = visual.fig
 
