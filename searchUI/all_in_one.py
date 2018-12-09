@@ -1,8 +1,5 @@
 import json, os
-import cartopy.crs as ccrs
-import cartopy.io.shapereader as shpreader
 import matplotlib.pyplot as plt, mpld3
-import cartopy.feature as cfeature
 import numpy as np
 from datetime import datetime
 import seaborn as sns
