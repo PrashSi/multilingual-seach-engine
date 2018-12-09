@@ -103,9 +103,9 @@ section {
 
 .btn-primary {
 	background-color: #0c9dfd;
-    margin: auto 10px;
-    font-family: Helvetica, SansSerif;
-    font-weight: bold;
+  margin: auto 10px;
+  font-family: Helvetica, SansSerif;
+  font-weight: bold;
 }
 
 .btn-primary:hover {
@@ -113,10 +113,24 @@ section {
     border-color: white;
 }
 
+.btn-link {
+  text-decoration: underline;
+  cursor: pointer;
+  color: #0c9dfd;
+  font-weight: bold;
+}
+
+.nav{
+  text-align: center;
+}
+
 .inputBox {
 	color: #0f0f0f;
-    width: 1000px;
-    text-align: center;
+  text-align: center;
+}
+
+.spelling {
+  text-align: center;
 }
 
 h1 {

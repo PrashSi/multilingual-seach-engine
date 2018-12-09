@@ -7,21 +7,30 @@
 	<div class="container">
 		<div class="nav">
 			<form action="{{url_for('search')}}" id="form" action="." method="POST">
-				<div class = "inputBox">
+				<div class="inputBox">
 	            	<input type="text" name="key_word" placeholder="" size ="50" value="{{ query }}">
 	            	<input type="hidden" name="lang_f" value="">
 		            <input type="hidden" name="topic_f" value="">
 		            <input type="hidden" name="city_f" value="">
 		            <input type="hidden" name="date_f1" value="">
 		            <input type="hidden" name="date_f2" value="">
-		    	    <button class="btn btn-primary btn-info" type="submit" role="button">fetch</button>
-		    	    {% if sp_corr != query %}
-		    	    	<br>
-		    	    	<input type="hidden" name="key_word" value="{{ sp_corr }}"> Did you mean: 
-		    	    	<button class="btn btn-info" type="submit" role="button">{{ sp_corr }}</button>
-		    	    {% endif %}
+		    	    <button class="btn btn-primary btn-info" name="button_1" type="submit" role="button">fetch</button>
 		    	</div>
 		  	</form>
+		  	{% if sp_corr != query %}
+			  	<form action="{{url_for('search')}}" id="form" name="form" action="." method="POST">
+			  		<div class="spelling">
+			  			<input type="hidden" name="key_word" value="{{ sp_corr }}"> 
+		    	    	<input type="hidden" name="lang_f" value="">
+			            <input type="hidden" name="topic_f" value="">
+			            <input type="hidden" name="city_f" value="">
+			            <input type="hidden" name="date_f1" value="">
+			            <input type="hidden" name="date_f2" value="">
+		    	    	<b><i>Did you mean:</i></b>
+		    	    	<button class="btn btn-link" type="submit" name="button_2" role="button">{{ sp_corr }}</button>
+		    	    </div>
+			  	</form>
+		  	{% endif %}
 	    </div>
 	</div>
 

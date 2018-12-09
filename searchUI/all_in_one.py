@@ -170,19 +170,23 @@ class visualize:
         # with open(self.json_file) as f:
             # lines = f.readlines()[0]
             # tweets = json.loads(lines)
-            # ct = 0
+        ct = 0
+        city_country = {'nyc': 'United States', 'mexico city': 'Mexico', 'paris': 'France',
+                        'delhi': 'India', 'bangkok': 'Thailand'}
         for tweet in self.json_file:
             ct += 1
             if ct > 1000:
                 break
-            pais.append(tweet['country'])
+            pais.append(city_country[tweet['city']])
 
         # count the number of times a country is in the list
         unique_pais = set(pais)
         unique_pais = list(unique_pais)
         c_numero = []
+        cty_count = {}
         for p in unique_pais:
             c_numero.append(pais.count(p))
+            cty_count[p] = cty_count.get(p, 0) + 1
         maximo = max(c_numero)
 
         # --- Build Map ---
@@ -218,7 +222,7 @@ class visualize:
         plt.savefig(os.path.join(self.fig_path, 'heatmap.png'), bbox_inches='tight', dpi=400)
         plt.close("all")
         # return ax
-        return 
+        return cty_count
 
 
 # if __name__ == '__main__':

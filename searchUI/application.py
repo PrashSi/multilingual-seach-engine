@@ -46,6 +46,7 @@ def index():
 
 @app.route("/search", methods=["POST"])
 def search():
+    #~~~~~~~~~~~~~~~~~~~~~ get from user ~~~~~~~~~~~~~~~~~~~~~#
     query = request.form['key_word']
     lang = request.form['lang_f']
     topic = request.form['topic_f']
@@ -54,22 +55,22 @@ def search():
     if date_s == 'NOW':
         date_s = '*'
     date_e = formatDate(request.form['date_f2'])
+    #~~~~~~~~~~~~~~~~~~~~~ query solr ~~~~~~~~~~~~~~~~~~~~~#
     filters = {'query': query, 'lang_f': lang, 'topic_f': topic, 
             'city_f': city, 'date_f1': date_s, 'date_f2': date_e, 'start': '0', 'rows': '15'}
-
     results = fetch_results.search(filters)
-    visual = all_in_one.visualize(results['docs'], 'static/figs')
-    # tagCloud, hashtags = visual.tagcloud()
-    pie_data = visual.sentiment()
-    # pie_data = {'pos': 50, 'neg': 10, 'neu': 40}
-    country = {'Germany': 100, 'United_States': 800, 'Brazil': 400, 'Canada': 500, 'RU': 1000}
-    # country = {[100, 800, 400, 500, 1000]}
-    # analytics = {'timeline': visual.timeline(), 'tagcloud': visual.tagcloud(), 
-                # 'density': density, 'pie': pie, 'heatmap': visual.setMap()}
-    analytics = visual.sentiment()
+    analytics = {'pie_data': '', 'country': ''}
+    if results['numFound'] > 0:
+    #~~~~~~~~~~~~~~~~~~~~~ analytics ~~~~~~~~~~~~~~~~~~~~~#
+        visual = all_in_one.visualize(results['docs'], 'static/figs')
+        # tagCloud, hashtags = visual.tagcloud()
+        pie_data = visual.sentiment()
+        country = {'Germany': 100, 'United_States': 800, 'Brazil': 400, 'Canada': 500, 'RU': 1000}
+        # country = visual.setMap()
+        analytics = {'pie_data': pie_data, 'country': country}
+
     return render_template("search.html", query=query, filters=filters, 
-                            results=results['docs'], analytics=analytics, sp_corr = spelling(query),
-                            pie_data=pie_data, country=country)
+                            results=results['docs'], analytics=analytics, sp_corr = spelling(query))
 
 
 @app.errorhandler(HTTPException)

@@ -6,7 +6,9 @@
 	{% set tweet = results[i] %}
 	{% set source = "https://twitter.com/statuses/" + tweet['id'] %}
 
-	<a href="{{ source }}">{{ tweet['tweet_text'][0] }}</a>
+	{{ tweet['tweet_text'][0] }}<br>
+	<a href="{{ source }}">Source</a>
+
 	{% if tweet['mentions'] %}
 		<br>mentions:
 		{% for user in tweet['mentions'] %}
