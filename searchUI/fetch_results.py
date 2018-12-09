@@ -10,22 +10,6 @@ import urllib.parse
 q = '' # free text filter.
 fq = '' # advance filters
 
-def formatDate(data):
-    date = data
-    time = date.split(':')
-    if int(time[1]) > 30 and int(time[1]) < 23:
-        hour = int(time[0]) + 1
-    else:
-        hour = int(time[0])
-    minute = 0
-    sec = 0
-    # month = list(calendar.month_abbr).index(date[1])
-    year = int(date[-1])
-    day = int(date[2])
-    d = datetime.datetime(year, month, day, hour, minute, sec)
-    date = '{:%Y-%m-%dT%H:%M:%SZ}'.format(d)
-    return date
-
 def search( query):
 
 	solr = 'http://18.222.230.12:8984/solr/IRF18P1/select?wt=json'
@@ -76,9 +60,9 @@ def search( query):
 
 # call function like this
 
-dic = {'query': '', 'lang_f': 'en', 'topic_f': 'politics',
-           'city_f': 'nyc', 'date_f1':'2018-08-08T00:00:00Z' , 'date_f2': 'NOW', 'start':'0' , 'rows':'15'}
-data = search(dic)
+# dic = {'query': '', 'lang_f': 'en', 'topic_f': 'politics',
+#            'city_f': 'nyc', 'date_f1':'2018-08-08T00:00:00Z' , 'date_f2': 'NOW', 'start':'0' , 'rows':'15'}
+# data = search(dic)
 
 # for dat in data['docs']:
 		# print (dat)

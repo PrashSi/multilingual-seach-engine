@@ -97,7 +97,7 @@ class visualize:
         plt.axis("off")
         plt.savefig(os.path.join(self.fig_path, 'tagcloud.png'), dpi=400)
         plt.close("all")
-        return ax, sorted_hashtags
+        return sorted_hashtags
 
 
     def sentiment(self):
