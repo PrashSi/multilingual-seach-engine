@@ -17,6 +17,10 @@ select {
   margin: auto 10px;
 }
 
+.piechart {
+  margin-right: 0px;
+  margin-top: 20px;
+}
 
 .active {
   background: rgba(255,255,255,1);
@@ -92,6 +96,26 @@ section {
   padding-bottom: 20px;
   font-family: Helvetica, SansSerif;
 }*/
+
+/*ul.pagination {
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+}
+
+ul.pagination li {display: inline;}
+
+ul.pagination li a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+}*/
+
+.pagination li {
+  display:inline-block;
+  padding:5px;
+}
 
 #filters {
   background: rgba(255,255,255,1);

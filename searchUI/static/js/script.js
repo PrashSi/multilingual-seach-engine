@@ -12,3 +12,9 @@ $(function () {
 $('#myTab a:first').tab('show');
 });
 
+
+var monkeyList = new List('test-list', {
+  valueNames: ['tweet_item'],
+  page: 30,
+  pagination: true
+});

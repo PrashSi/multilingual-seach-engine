@@ -10,12 +10,14 @@ import urllib.parse
 q = '' # free text filter.
 fq = '' # advance filters
 
-def search( query):
+def search(query):
 
-	solr = 'http://18.222.230.12:8984/solr/IRF18P1/select?wt=json'
+	# solr = 'http://18.222.230.12:8984/solr/IRF18P1/select?wt=json'
+	solr = 'http://128.205.39.134:8983/solr/gettingstarted/select?wt=json'
 
 	month_first = True
-	fl = 'id tweet_lang source tweet_text topic city text tweet_date hashtags'
+	# fl = 'id tweet_lang source tweet_text topic city text tweet_date hashtags'
+	fl = 'id tweet_lang tweet_text topic country tweet_date hashtags mentions sentiment screen_name text_*'
 
 	
 	qfilter = query;
@@ -50,7 +52,7 @@ def search( query):
 	fl = urllib.parse.quote(fl)
 	solr += '&fl='+fl
 	
-	# print (solr)
+	print (solr)
 	result = urllib.request.urlopen(solr)
 
 	data =  json.load(result)['response']	

@@ -45,12 +45,17 @@
 	<div class="group">
 		<aside>
 			<div class="jumbotron" id="filters">
-				<u><b>Trending</b></u>
-				<br> <a href="https://twitter.com/hashtag/hi">#hi</a><br>
+				<u><b>Trending</b></u><br>
+				{% if analytics['hashtags']|length == 0%}
+					None
+				{% endif %}
 				{% for i in range(analytics['hashtags']|length) %}
 					{% set hash = analytics['hashtags'][i] %}
-					{% set hashLink = "https://twitter.com/hashtag/" + hash %}
-					<a href="{{ hashLink }}">#{{ hash }}</a> <br>
+					{% if hash[0]|length > 1  and i < 11 %}
+						{% set hashLink = "https://twitter.com/hashtag/" + hash[0] %}
+						<a href="{{ hashLink }}">#{{ hash[0] }}</a> <br>
+					{% endif %}
+					
 				{% endfor %}
 			</div>
 			{% include "filters.html" %}

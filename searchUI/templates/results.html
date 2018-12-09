@@ -1,32 +1,66 @@
-<!-- <section id="smallS"> -->
-	{% if results|length == 0 %}
-		No results, please try another query
-	{% endif %}
 
-	{% for i in range(results|length) %}
-	<p><div class="jumbotron" id="tweets">
-		{% set tweet = results[i] %}
-		{% set source = "https://twitter.com/statuses/" + tweet['id'] %}
 
-		{{ tweet['tweet_text'][0] }}<br>
-		<a href="{{ source }}">Source</a>
+{% if results|length == 0 %}
+	No results, please try another query
+{% endif %}
 
-		{% if tweet['mentions'] %}
-			<br>mentions:
-			{% for user in tweet['mentions'] %}
-				{% set userL = "https://twitter.com/" + user %}
-				<a href="{{ userL }}">@{{ user }}</a>
-			{% endfor %}
-		{% endif %}
-		
-		{% if tweet['hashtags'] %}
-			<br>hashtags: 
-			{% for hash in tweet['hashtags'] %}
-				{% set hashL = "https://twitter.com/hashtag/" + hash %}
-				<a href="{{ hashL }}">#{{ hash }}</a>
-			{% endfor %}
-		{% endif %}
-		<br>
-	</div></p>
-	{% endfor %}
-<!-- </section> -->
+
+<div id="test-list">
+	<ul class="list">
+		{% set counter = 0 %}
+		{% for i in range(results|length) %}
+		<p class="tweet_item">
+			<div class="jumbotron" id="tweets">
+			{% set tweet = results[i] %}
+			{% set source = "https://twitter.com/statuses/" + tweet['id'] %}
+
+			{% set screenL = "https://twitter.com/" + tweet['screen_name'][0] %}
+			<a href="{{ screenL }}" target="_blank">{{ tweet['screen_name'][0] }}:</a>
+
+			{{ tweet['tweet_text'][0] }}<br>
+			<a href="{{ source }}" target="_blank">Source</a>
+
+			{% if tweet['mentions'] %}
+				{% for user in tweet['mentions'] %}
+					{% if user|length > 1 %}
+						{% set userL = "https://twitter.com/" + user %}
+						<a href="{{ userL }}" target="_blank">@{{ user }}</a>
+					{% endif %}
+				{% endfor %}
+			{% endif %}
+			
+			{% if tweet['hashtags'] %}
+				{% for hash in tweet['hashtags'] %}
+					{% if hash|length > 1 %}
+						{% set hashL = "https://twitter.com/hashtag/" + hash[0] %}
+						<a href="{{ hashL }}" target="_blank">#{{ hash }}</a>
+					{% endif %}
+				{% endfor %}
+			{% endif %}
+			<br>
+			</div>
+		</p>
+		{% endfor %}
+	</ul>
+	<ul class="pagination"></ul>
+</div>
+
+<!-- <div id="test-list">
+    <ul class="list">
+      <p class="name">Guybrush Threepwood</p>
+      <p class="name">Elaine Marley</p>
+      <p class="name">LeChuck</p>
+      <li><p class="name">Stan</p></li>
+      <li><p class="name">Voodoo Lady</p></li>
+      <li><p class="name">Herman Toothrot</p></li>
+      <li><p class="name">Meathook</p></li>
+      <li><p class="name">Carla</p></li>
+      <li><p class="name">Otis</p></li>
+      <li><p class="name">Rapp Scallion</p></li>
+      <li><p class="name">Rum Rogers Sr.</p></li>
+      <li><p class="name">Men of Low Moral Fiber</p></li>
+      <li><p class="name">Murray</p></li>
+      <li><p class="name">Cannibals</p></li>
+    </ul>
+    <ul class="pagination"></ul>
+</div> -->

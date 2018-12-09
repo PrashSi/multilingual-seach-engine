@@ -14,6 +14,9 @@ function drawPie() {
 
     var options = {
       title: 'Sentiment Analysis'
+      ,chartArea:{left:0,top:30,width:"90%",height:"80%"}
+      ,height: 250
+      ,width: 450
     };
 
     var chart = new google.visualization.PieChart(document.getElementById('piechart'));
@@ -24,40 +27,31 @@ function drawPie() {
 </script>
 
 {% if analytics['pie_data']|length > 1%}
-  <div id="piechart" style="width: 400px; height: 300px;""></div>
+  <div id="piechart" style="width: 500px; height: 300px;"> </div> 
+  <img src="/static/figs/density.png" alt="sentimentSpread" width="600px">
 {% endif %}
+
+
 
 
 <script>
 google.charts.load('current', {
         'packages':['geochart'],
-        // Note: you will need to get a mapsApiKey for your project.
-        // See: https://developers.google.com/chart/interactive/docs/basic_load_libs#load-settings
         'mapsApiKey': 'AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY'
 });
 google.charts.setOnLoadCallback(drawRegionsMap);
-
 
 function drawRegionsMap() {
   var country = JSON.parse('{{ analytics['country'] | tojson | safe }}');
   if (Object.keys(country).length > 0) {
     var data = google.visualization.arrayToDataTable([
       ['Country',     'Popularity'],
-      ['Germany',     country['Germany']],
-      ['United States', country['United_States']],
-      ['Brazil',    country['Brazil']],
-      ['Canada',    country['Canada']],
-      ['RU',      country['RU']],
+      ['India',     country['India']],
+      ['United States', country['United States']],
+      ['Thailand',    country['Thailand']],
+      ['Mexico',    country['Mexico']],
+      ['France',      country['France']],
     ]);
-
-    // var data = google.visualization.arrayToDataTable([
-    //   ['Country',    'Popularity'],
-    //   ['Germany',    100],
-    //   ['United States', 300],
-    //   ['Brazil',     600],
-    //   ['Canada',     900],
-    //   ['RU',       1200],
-    // ]);
 
     var options = {};
 
@@ -72,20 +66,5 @@ function drawRegionsMap() {
   <div id="regions_div" style="width: 100%;"></div>
 {% endif %}
 
-<!-- <div class="row">
-  <div class="column">
-    <img src="/static/figs/pie.png" alt="pie" style="width:100%">
-  </div>
-  <div class="column">
-    <img src="/static/figs/density.png" alt="density" style="width:100%">
-  </div>
-</div> -->
+<img src="/static/figs/tagcloud.png" alt="tagcloud" width="650px">
 
-<!-- <div class="row">
-  <div class="column">
-    <img src="/static/figs/tagcloud.png" alt="tagcloud" style="width:100%">
-  </div>
-  <div class="column">
-    <img src="/static/figs/heatmap.png" alt="heatmp" style="width:100%">
-  </div>
-</div> -->

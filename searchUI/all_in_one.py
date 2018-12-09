@@ -82,12 +82,15 @@ class visualize:
         #     lines = f.readlines()[0]
         #     tweets = json.loads(lines)
         for tweet in self.json_file:
-            text = text + tweet['tweet_' + tweet['tweet_lang']]
-            if tweet['tweet_hashtag'] in hashtag.keys():
-                hashtag[tweet['tweet_hashtag']] += 1
-            else:
-                hashtag[tweet['tweet_hashtag']] = 0
-        sorted_hashtags = sorted(hashtag.items(), key=operator.itemgetter(1))
+            k = 'text_' + tweet['tweet_lang'][0]
+            if k in tweet:
+                text = text + tweet[k][0]
+                for i in range(len(tweet['hashtags'])):
+                    if tweet['hashtags'][i] in hashtag.keys():
+                        hashtag[tweet['hashtags'][i]] += 1
+                    else:
+                        hashtag[tweet['hashtags'][i]] = 0
+        sorted_hashtags = sorted(hashtag.items(), key=operator.itemgetter(1), reverse=True)
         wordcloud = WordCloud().generate(text)
         wordcloud.background_color = 'white'
         # ax = self.fig.add_subplot(232)
@@ -101,53 +104,63 @@ class visualize:
 
 
     def sentiment(self):
-        tweets = []
+        # tweets = []
         count = 0
+        score = []
+        pcount = 0
+        ncount = 0
+        neuCount = 0
         for tweet in self.json_file:
+            # score.append(tweet['score'])
+            score.append(tweet['sentiment'])
             count += 1
-            if count > 50:
-                break
+            # if count > 50:
+            #     break
             parsed_tweet = {}
 
             # saving text of tweet
-            parsed_tweet['text'] = tweet['tweet_text']
-            # parsed_tweet['score'] = tweet['score']
-            parsed_tweet['score'] = np.random.normal(0, 1, (1, ))
+            # parsed_tweet['text'] = tweet['tweet_text']
+            # parsed_tweet['sentiment'] = tweet['sentiment']
+            # parsed_tweet['score'] = np.random.normal(0, 1, (1, ))
 
-            if parsed_tweet['score'] > 0:
-                parsed_tweet['sentiment'] = 'positive'
-            elif parsed_tweet['score'] < 0:
-                parsed_tweet['sentiment'] = 'negative'
+            if tweet['sentiment'] > 0:
+                # parsed_tweet['sentiment'] = 'positive'
+                pcount += 1
+            elif tweet['sentiment'] < 0:
+                # parsed_tweet['sentiment'] = 'negative'
+                ncount += 1
             else:
-                parsed_tweet['sentiment'] = 'neutral'
+                # parsed_tweet['sentiment'] = 'neutral'
+                neuCount += 1
 
-            tweets.append(parsed_tweet)
-        ptweets = [tweet for tweet in tweets if tweet['sentiment'] == 'positive']
-        ntweets = [tweet for tweet in tweets if tweet['sentiment'] == 'negative']
-        ptweets_num = 100 * len(ptweets) / len(tweets)
-        ntweets_num = 100 * len(ntweets) / len(tweets)
-        netweets_num = 100 * (len(tweets) - len(ntweets) - len(ptweets)) / len(tweets)
-        return {'pos': ptweets_num, 'neg':ntweets_num, 'neu':netweets_num}
+            # tweets.append(parsed_tweet)
+        # ptweets = [tweet for tweet in tweets if tweet['sentiment'] == 'positive']
+        # ntweets = [tweet for tweet in tweets if tweet['sentiment'] == 'negative']
+        # ptweets_num = 100 * len(ptweets) / len(tweets)
+        # ntweets_num = 100 * len(ntweets) / len(tweets)
+        # netweets_num = 100 * (len(tweets) - len(ntweets) - len(ptweets)) / len(tweets)
+        self.gen_plot(score)
+        return {'pos': pcount, 'neg':ncount, 'neu':neuCount}
         # return self.gen_plot(tweets)
 
-    def gen_plot(self, tweets):
-        ptweets = [tweet for tweet in tweets if tweet['sentiment'] == 'positive']
-        ntweets = [tweet for tweet in tweets if tweet['sentiment'] == 'negative']
-        ptweets_num = 100 * len(ptweets) / len(tweets)
-        ntweets_num = 100 * len(ntweets) / len(tweets)
-        netweets_num = 100 * (len(tweets) - len(ntweets) - len(ptweets)) / len(tweets)
+    def gen_plot(self, score):
+        # ptweets = [tweet for tweet in tweets if tweet['sentiment'] == 'positive']
+        # ntweets = [tweet for tweet in tweets if tweet['sentiment'] == 'negative']
+        # ptweets_num = 100 * len(ptweets) / len(tweets)
+        # ntweets_num = 100 * len(ntweets) / len(tweets)
+        # netweets_num = 100 * (len(tweets) - len(ntweets) - len(ptweets)) / len(tweets)
 
-        sizes = [ptweets_num, ntweets_num, netweets_num]
-        # ax1 = self.fig.add_subplot(233)
-        fig1 = plt.figure()
-        ax1 = fig1.add_subplot(111)
-        ax1.set_title('Sentiment Chart')
-        ax1.pie(sizes, labels=self.labels, autopct='%1.1f%%', startangle=90)
-        plt.savefig(os.path.join(self.fig_path, 'pie.png'), bbox_inches='tight', dpi=500)
+        # sizes = [ptweets_num, ntweets_num, netweets_num]
+        # # ax1 = self.fig.add_subplot(233)
+        # fig1 = plt.figure()
+        # ax1 = fig1.add_subplot(111)
+        # ax1.set_title('Sentiment Chart')
+        # ax1.pie(sizes, labels=self.labels, autopct='%1.1f%%', startangle=90)
+        # plt.savefig(os.path.join(self.fig_path, 'pie.png'), bbox_inches='tight', dpi=500)
 
-        score = []
-        for tweet in tweets:
-            score.append(tweet['score'])
+        # score = []
+        # for tweet in tweets:
+        #     score.append(tweet['score'])
         # ax2 = self.fig.add_subplot(234)
         fig2 = plt.figure()
         ax2 = fig2.add_subplot(111)
@@ -155,10 +168,11 @@ class visualize:
         # ax2.set_title('Sentiment Distribution', fontsize=15)
         ax2.set_xlim(-1.0, 1.0)
         ax2.set_ylabel('Density')
+        ax2.set_title('Sentiment Distribution')
         ax2.set_xlabel('Negative $\longrightarrow$-------------Neutral--------------$\longrightarrow$ Positive')
         plt.savefig(os.path.join(self.fig_path, 'density.png'), bbox_inches='tight', dpi=500)
         plt.close("all")
-        return ax1, ax2
+        # return ax1, ax2
 
 
     def setMap(self):
@@ -170,24 +184,24 @@ class visualize:
         # with open(self.json_file) as f:
             # lines = f.readlines()[0]
             # tweets = json.loads(lines)
-        ct = 0
-        city_country = {'nyc': 'United States', 'mexico city': 'Mexico', 'paris': 'France',
-                        'delhi': 'India', 'bangkok': 'Thailand'}
+        # ct = 0
+        cty_count = {'United States': 0, 'Mexico': 0, 'Thailand': 0, 'India': 0, 'France': 0}
         for tweet in self.json_file:
-            ct += 1
-            if ct > 1000:
-                break
-            pais.append(city_country[tweet['city']])
+            # ct += 1
+            # if ct > 1000:
+            #     break
+            cty_count[tweet['country'][0]] += 1
+            # pais.append(tweet['country'][0])
 
         # count the number of times a country is in the list
-        unique_pais = set(pais)
-        unique_pais = list(unique_pais)
-        c_numero = []
-        cty_count = {}
-        for p in unique_pais:
-            c_numero.append(pais.count(p))
-            cty_count[p] = cty_count.get(p, 0) + 1
-        maximo = max(c_numero)
+        # unique_pais = set(pais)
+        # unique_pais = list(unique_pais)
+        # # c_numero = []
+        # cty_count = {}
+        # for p in pais:
+        #     # c_numero.append(pais.count(p))
+        #     cty_count[p] = cty_count.get(p, 0) + 1
+        # maximo = max(c_numero)
 
         # # --- Build Map ---
         # cmap = plt.get_cmap('Reds')
