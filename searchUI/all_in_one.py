@@ -6,6 +6,7 @@ import cartopy.feature as cfeature
 import numpy as np
 from datetime import datetime
 import seaborn as sns
+import operator
 from wordcloud import WordCloud
 sns.set()
 
@@ -27,17 +28,17 @@ class visualize:
 
         start = datetime.strptime('2018-09-01', self.date_format)
 
-        with open(self.json_file) as f:
-            lines = f.readlines()[0]
-            tweets = json.loads(lines)
+        # with open(self.json_file) as f:
+        for tweet in self.json_file:
+            # tweets = json.loads(lines)
 
-            for tweet in tweets:
-                date = tweet['tweet_date'][:10]
-                end = datetime.strptime(date, self.date_format)
-                week = (end - start).days // 7
-                topic = tweet['topic']
-                row = self.topics_item[topic]
-                timetable[row, week] = timetable[row, week] + 1
+            # for tweet in tweets:
+            date = tweet['tweet_date'][:10]
+            end = datetime.strptime(date, self.date_format)
+            week = (end - start).days // 7
+            topic = tweet['topic']
+            row = self.topics_item[topic]
+            timetable[row, week] = timetable[row, week] + 1
 
         N = timetable.shape[1]
         ind = np.arange(N)
@@ -57,7 +58,7 @@ class visualize:
         ax.legend(p, list(self.topics_item.keys()), loc=0)
         plt.savefig(os.path.join(self.fig_path, 'timeline.png'), dpi=500, bbox_inches='tight')
 
-        return ax
+        # return ax
 
     # def lang_field(self, tweet):
     #     lan_keys = tweet.keys()
@@ -76,12 +77,17 @@ class visualize:
 
     def tagcloud(self):
         text = ''
-        with open(self.json_file) as f:
-            lines = f.readlines()[0]
-            tweets = json.loads(lines)
-            for tweet in tweets:
-                text = text + tweet['tweet_'+tweet['tweet_lang']]
-
+        hashtag = {}
+        # with open(self.json_file) as f:
+        #     lines = f.readlines()[0]
+        #     tweets = json.loads(lines)
+        for tweet in self.json_file:
+            text = text + tweet['tweet_' + tweet['tweet_lang']]
+            if tweet['tweet_hashtag'] in hashtag.keys():
+                hashtag[tweet['tweet_hashtag']] += 1
+            else:
+                hashtag[tweet['tweet_hashtag']] = 0
+        sorted_hashtags = sorted(hashtag.items(), key=operator.itemgetter(1))
         wordcloud = WordCloud().generate(text)
         wordcloud.background_color = 'white'
         # ax = self.fig.add_subplot(232)
@@ -90,41 +96,38 @@ class visualize:
         ax.imshow(wordcloud, interpolation='bilinear', )
         plt.axis("off")
         plt.savefig(os.path.join(self.fig_path, 'tagcloud.png'), dpi=400)
-        return ax
+        plt.close("all")
+        return ax, sorted_hashtags
 
 
     def sentiment(self):
         tweets = []
+        count = 0
+        for tweet in self.json_file:
+            count += 1
+            if count > 50:
+                break
+            parsed_tweet = {}
 
-        with open(self.json_file, 'r') as f:
-            lines = f.readlines()[0]
-            tweets_ = json.loads(lines)
-            count = 0
-            for tweet in tweets_:
-                count += 1
-                if count > 50:
-                    break
-                parsed_tweet = {}
+            # saving text of tweet
+            parsed_tweet['text'] = tweet['tweet_text']
+            # parsed_tweet['score'] = tweet['score']
+            parsed_tweet['score'] = np.random.normal(0, 1, (1, ))
 
-                # saving text of tweet
-                parsed_tweet['text'] = tweet['tweet_text']
-                # parsed_tweet['score'] = tweet['score']
-                parsed_tweet['score'] = np.random.normal(0, 1, (1, ))
+            if parsed_tweet['score'] > 0:
+                parsed_tweet['sentiment'] = 'positive'
+            elif parsed_tweet['score'] < 0:
+                parsed_tweet['sentiment'] = 'negative'
+            else:
+                parsed_tweet['sentiment'] = 'neutral'
 
-                if parsed_tweet['score'] > 0:
-                    parsed_tweet['sentiment'] = 'positive'
-                elif parsed_tweet['score'] < 0:
-                    parsed_tweet['sentiment'] = 'negative'
-                else:
-                    parsed_tweet['sentiment'] = 'neutral'
-
-                tweets.append(parsed_tweet)
+            tweets.append(parsed_tweet)
         ptweets = [tweet for tweet in tweets if tweet['sentiment'] == 'positive']
         ntweets = [tweet for tweet in tweets if tweet['sentiment'] == 'negative']
         ptweets_num = 100 * len(ptweets) / len(tweets)
         ntweets_num = 100 * len(ntweets) / len(tweets)
         netweets_num = 100 * (len(tweets) - len(ntweets) - len(ptweets)) / len(tweets)
-        return ptweets_num, ntweets_num, netweets_num
+        return {'pos': ptweets_num, 'neg':ntweets_num, 'neu':netweets_num}
         # return self.gen_plot(tweets)
 
     def gen_plot(self, tweets):
@@ -154,6 +157,7 @@ class visualize:
         ax2.set_ylabel('Density')
         ax2.set_xlabel('Negative $\longrightarrow$-------------Neutral--------------$\longrightarrow$ Positive')
         plt.savefig(os.path.join(self.fig_path, 'density.png'), bbox_inches='tight', dpi=500)
+        plt.close("all")
         return ax1, ax2
 
 
@@ -163,15 +167,15 @@ class visualize:
         # ax = self.fig.add_subplot(235, projection=ccrs.PlateCarree(central_longitude=0.0))
         fig = plt.figure()
         ax = fig.add_subplot(111,projection=ccrs.PlateCarree(central_longitude=0.0))
-        with open(self.json_file) as f:
-            lines = f.readlines()[0]
-            tweets = json.loads(lines)
-            ct = 0
-            for tweet in tweets:
-                ct += 1
-                if ct > 1000:
-                    break
-                pais.append(tweet['country'])
+        # with open(self.json_file) as f:
+            # lines = f.readlines()[0]
+            # tweets = json.loads(lines)
+            # ct = 0
+        for tweet in self.json_file:
+            ct += 1
+            if ct > 1000:
+                break
+            pais.append(tweet['country'])
 
         # count the number of times a country is in the list
         unique_pais = set(pais)
@@ -212,16 +216,18 @@ class visualize:
             raise Exception("check the way you are writting your country names!")
 
         plt.savefig(os.path.join(self.fig_path, 'heatmap.png'), bbox_inches='tight', dpi=400)
-        return ax
+        plt.close("all")
+        # return ax
+        return 
 
 
-if __name__ == '__main__':
-    visual = visualize('new.json', 'figs')
+# if __name__ == '__main__':
+#     visual = visualize('new.json', 'figs')
 
-    timeline = visual.timeline()
-    tagcloud = visual.tagcloud()
-    density, pie = visual.sentiment()
-    heatmap = visual.setMap()
+#     timeline = visual.timeline()
+#     tagcloud = visual.tagcloud()
+#     density, pie = visual.sentiment()
+#     heatmap = visual.setMap()
 
     # analysis_fig = visual.fig
 

@@ -66,7 +66,7 @@ def search( query):
 	fl = urllib.parse.quote(fl)
 	solr += '&fl='+fl
 	
-	print (solr)
+	# print (solr)
 	result = urllib.request.urlopen(solr)
 
 	data =  json.load(result)['response']	
@@ -80,5 +80,5 @@ dic = {'query': '', 'lang_f': 'en', 'topic_f': 'politics',
            'city_f': 'nyc', 'date_f1':'2018-08-08T00:00:00Z' , 'date_f2': 'NOW', 'start':'0' , 'rows':'15'}
 data = search(dic)
 
-for dat in data['docs']:
-		print (dat)
+# for dat in data['docs']:
+		# print (dat)

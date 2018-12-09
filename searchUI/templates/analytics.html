@@ -1,18 +1,77 @@
-<script type="text/javascript">
-            var p = 5
-            var neg = 10
-            var neu = 15 
+<script>
+google.charts.load('current', {'packages':['corechart']});
+google.charts.setOnLoadCallback(drawPie);
+
+function drawPie() {
+  var pie = JSON.parse('{{ pie_data | tojson | safe }}');
+  console.log(pie)
+  var data = google.visualization.arrayToDataTable([
+    ['Sentiment', 'Number of Tweets'],
+    ['Positive',      pie['pos']],
+    ['Negative',      pie['neg']],
+    ['Neutral',     pie['neu']],
+  ]);
+
+  var options = {
+    title: 'Sentiment Analysis'
+  };
+
+  var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+  chart.draw(data, options);
+};
 </script>
 
-<div id="piechart" style="width: 900px; height: 500px;"></div>
+<div id="piechart" style="width: 300px; height: 300px;"></div>
+
+
+<script>
+google.charts.load('current', {
+        'packages':['geochart'],
+        // Note: you will need to get a mapsApiKey for your project.
+        // See: https://developers.google.com/chart/interactive/docs/basic_load_libs#load-settings
+        'mapsApiKey': 'AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY'
+});
+google.charts.setOnLoadCallback(drawRegionsMap);
+
+
+function drawRegionsMap(country) {
+
+  var country = JSON.parse('{{ country | tojson | safe }}');
+  var data = google.visualization.arrayToDataTable([
+    ['Country',     'Popularity'],
+    ['Germany',     country['Germany']],
+    ['United States', country['United_States']],
+    ['Brazil',    country['Brazil']],
+    ['Canada',    country['Canada']],
+    ['RU',      country['RU']],
+  ]);
+
+  // var data = google.visualization.arrayToDataTable([
+  //   ['Country',    'Popularity'],
+  //   ['Germany',    100],
+  //   ['United States', 300],
+  //   ['Brazil',     600],
+  //   ['Canada',     900],
+  //   ['RU',       1200],
+  // ]);
+
+  var options = {};
+
+  var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+
+  chart.draw(data, options);
+};
+</script>
+
+<div id="regions_div" style="width: 500px; height: 300px;"></div>
+
 
 <div class="row">
   <div class="column">
-    <!-- <img src="https://i.redd.it/21k36k3rwj221.jpg" alt="Snow" style="width:100%"> -->
     <img src="/static/figs/pie.png" alt="pie" style="width:100%">
   </div>
   <div class="column">
-    <!-- <img src="https://i.redd.it/21k36k3rwj221.jpg" alt="Forest" style="width:100%"> -->
     <img src="/static/figs/density.png" alt="density" style="width:100%">
   </div>
 </div>
@@ -25,10 +84,3 @@
     <img src="/static/figs/heatmap.png" alt="heatmp" style="width:100%">
   </div>
 </div>
-
-
-
-<!-- {% for i in range(analytics|length) %}
-  {% if i % 3 == 0 %}
-  {% endif %}
-{% endfor %} -->

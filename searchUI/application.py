@@ -7,7 +7,6 @@ import re
 import datetime
 from textblob import TextBlob
 import fetch_results
-import matplotlib.pyplot as plt, mpld3
 
 app = Flask(__name__)
 
@@ -58,17 +57,19 @@ def search():
     filters = {'query': query, 'lang_f': lang, 'topic_f': topic, 
             'city_f': city, 'date_f1': date_s, 'date_f2': date_e, 'start': '0', 'rows': '15'}
 
-    # results = []
     results = fetch_results.search(filters)
-    visual = all_in_one.visualize(results, 'figs')
-    # pie_data = visual.sentiment()
-    pie_data = [5, 1, 5]
+    visual = all_in_one.visualize(results['docs'], 'static/figs')
+    # tagCloud, hashtags = visual.tagcloud()
+    pie_data = visual.sentiment()
+    # pie_data = {'pos': 50, 'neg': 10, 'neu': 40}
+    country = {'Germany': 100, 'United_States': 800, 'Brazil': 400, 'Canada': 500, 'RU': 1000}
+    # country = {[100, 800, 400, 500, 1000]}
     # analytics = {'timeline': visual.timeline(), 'tagcloud': visual.tagcloud(), 
                 # 'density': density, 'pie': pie, 'heatmap': visual.setMap()}
-    analytics = []
+    analytics = visual.sentiment()
     return render_template("search.html", query=query, filters=filters, 
                             results=results['docs'], analytics=analytics, sp_corr = spelling(query),
-                            pie_data = pie_data)
+                            pie_data=pie_data, country=country)
 
 
 @app.errorhandler(HTTPException)
@@ -79,3 +80,18 @@ def errorhandler(error):
 # https://github.com/pallets/flask/pull/2314
 for code in default_exceptions:
     app.errorhandler(code)(errorhandler)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
