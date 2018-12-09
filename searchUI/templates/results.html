@@ -1,28 +1,32 @@
-{% if results|length == 0 %}
-	No results, please try another query
-{% endif %}
-
-{% for i in range(results|length) %}
-	{% set tweet = results[i] %}
-	{% set source = "https://twitter.com/statuses/" + tweet['id'] %}
-
-	{{ tweet['tweet_text'][0] }}<br>
-	<a href="{{ source }}">Source</a>
-
-	{% if tweet['mentions'] %}
-		<br>mentions:
-		{% for user in tweet['mentions'] %}
-			{% set userL = "https://twitter.com/" + user %}
-			<a href="{{ userL }}">@{{ user }}</a>
-		{% endfor %}
+<!-- <section id="smallS"> -->
+	{% if results|length == 0 %}
+		No results, please try another query
 	{% endif %}
-	
-	{% if tweet['hashtags'] %}
-		<br>hashtags: 
-		{% for hash in tweet['hashtags'] %}
-			{% set hashL = "https://twitter.com/hashtag/" + hash %}
-			<a href="{{ hashL }}">#{{ hash }}</a>
-		{% endfor %}
-	{% endif %}
-	<br><br>
-{% endfor %}
+
+	{% for i in range(results|length) %}
+	<p><div class="jumbotron" id="tweets">
+		{% set tweet = results[i] %}
+		{% set source = "https://twitter.com/statuses/" + tweet['id'] %}
+
+		{{ tweet['tweet_text'][0] }}<br>
+		<a href="{{ source }}">Source</a>
+
+		{% if tweet['mentions'] %}
+			<br>mentions:
+			{% for user in tweet['mentions'] %}
+				{% set userL = "https://twitter.com/" + user %}
+				<a href="{{ userL }}">@{{ user }}</a>
+			{% endfor %}
+		{% endif %}
+		
+		{% if tweet['hashtags'] %}
+			<br>hashtags: 
+			{% for hash in tweet['hashtags'] %}
+				{% set hashL = "https://twitter.com/hashtag/" + hash %}
+				<a href="{{ hashL }}">#{{ hash }}</a>
+			{% endfor %}
+		{% endif %}
+		<br>
+	</div></p>
+	{% endfor %}
+<!-- </section> -->

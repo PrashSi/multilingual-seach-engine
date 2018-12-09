@@ -44,6 +44,15 @@
 
 	<div class="group">
 		<aside>
+			<div class="jumbotron" id="filters">
+				<u><b>Trending</b></u>
+				<br> <a href="https://twitter.com/hashtag/hi">#hi</a><br>
+				{% for i in range(analytics['hashtags']|length) %}
+					{% set hash = analytics['hashtags'][i] %}
+					{% set hashLink = "https://twitter.com/hashtag/" + hash %}
+					<a href="{{ hashLink }}">#{{ hash }}</a> <br>
+				{% endfor %}
+			</div>
 			{% include "filters.html" %}
 		</aside>
 
@@ -56,22 +65,7 @@
 					{% include "analytics.html" %}
 				</div>
 			</div>
-			{% for key in filters %}
-				{{ key }} {{ filters[key] }} <br>
-			{% endfor %}
 		</section>
-
-		<aside>
-			<div class="jumbotron">
-				<u><b>Trending</b></u>
-				<br> <a href="https://twitter.com/hashtag/hi">#hi</a><br>
-				{% for i in range(analytics['hashtags']|length) %}
-					{% set hash = analytics['hashtags'][i] %}
-					{% set hashLink = "https://twitter.com/hashtag/" + hash %}
-					<a href="{{ hashLink }}">#{{ hash }}</a> <br>
-				{% endfor %}
-			</div>
-		</aside>
 	</div>
 
 {% endblock %}
