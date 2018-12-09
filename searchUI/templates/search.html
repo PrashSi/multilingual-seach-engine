@@ -65,6 +65,11 @@
 			<div class="jumbotron">
 				<u><b>Trending</b></u>
 				<br> <a href="https://twitter.com/hashtag/hi">#hi</a><br>
+				{% for i in range(analytics['hashtags']|length) %}
+					{% set hash = analytics['hashtags'][i] %}
+					{% set hashLink = "https://twitter.com/hashtag/" + hash %}
+					<a href="{{ hashLink }}">#{{ hash }}</a> <br>
+				{% endfor %}
 			</div>
 		</aside>
 	</div>

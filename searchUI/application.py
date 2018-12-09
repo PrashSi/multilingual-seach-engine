@@ -17,15 +17,12 @@ def spelling(input):
 def formatDate(data):
     date = data.split('-')
     if len(date) == 3:
-
         hour = 0
         minute = 0
         sec = 0
-
         month = int(date[1])
         year = int(date[0])
         day = int(date[2])
-
         d = datetime.datetime(year, month, day, hour, minute, sec)
         date = '{:%Y-%m-%dT%H:%M:%SZ}'.format(d)
     else:
@@ -59,18 +56,20 @@ def search():
     filters = {'query': query, 'lang_f': lang, 'topic_f': topic, 
             'city_f': city, 'date_f1': date_s, 'date_f2': date_e, 'start': '0', 'rows': '15'}
     results = fetch_results.search(filters)
-    analytics = {'pie_data': '', 'country': ''}
-    if results['numFound'] > 0:
+
+    analytics = {'pie_data': '', 'country': '', 'hashtags': ['trump', 'test']}
     #~~~~~~~~~~~~~~~~~~~~~ analytics ~~~~~~~~~~~~~~~~~~~~~#
+    if results['numFound'] > 0:
         visual = all_in_one.visualize(results['docs'], 'static/figs')
+        hashtags = ['trump', 'test']
         # tagCloud, hashtags = visual.tagcloud()
         pie_data = visual.sentiment()
         country = {'Germany': 100, 'United_States': 800, 'Brazil': 400, 'Canada': 500, 'RU': 1000}
         # country = visual.setMap()
-        analytics = {'pie_data': pie_data, 'country': country}
+        analytics = {'pie_data': pie_data, 'country': country, 'hashtags': hashtags}
 
     return render_template("search.html", query=query, filters=filters, 
-                            results=results['docs'], analytics=analytics, sp_corr = spelling(query))
+                            results=results['docs'], analytics=analytics, sp_corr=spelling(query))
 
 
 @app.errorhandler(HTTPException)

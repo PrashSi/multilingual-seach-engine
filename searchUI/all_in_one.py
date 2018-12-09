@@ -165,8 +165,8 @@ class visualize:
         # --- Save Countries, Latitudes and Longitudes ---
         pais, lats, lons = [], [], []
         # ax = self.fig.add_subplot(235, projection=ccrs.PlateCarree(central_longitude=0.0))
-        fig = plt.figure()
-        ax = fig.add_subplot(111,projection=ccrs.PlateCarree(central_longitude=0.0))
+        # fig = plt.figure()
+        # ax = fig.add_subplot(111,projection=ccrs.PlateCarree(central_longitude=0.0))
         # with open(self.json_file) as f:
             # lines = f.readlines()[0]
             # tweets = json.loads(lines)
@@ -189,38 +189,38 @@ class visualize:
             cty_count[p] = cty_count.get(p, 0) + 1
         maximo = max(c_numero)
 
-        # --- Build Map ---
-        cmap = plt.get_cmap('Reds')
+        # # --- Build Map ---
+        # cmap = plt.get_cmap('Reds')
 
-        # --- Using the shapereader ---
-        test = 0
-        shapename = 'admin_0_countries'
-        countries_shp = shpreader.natural_earth(resolution='110m',
-                                          category='cultural', name=shapename)
-        ax.coastlines(resolution='110m', color='grey', linewidth=0.3)
-        ax.add_feature(cfeature.BORDERS, facecolor='none', edgecolor='k', linewidth=0.2)
-        ax.add_feature(cfeature.LAKES, facecolor='#BAECFA', linewidth=0.2)
-        ax.add_feature(cfeature.OCEAN, facecolor='#75DEFC')
-        ax.outline_patch.set_visible(False)
+        # # --- Using the shapereader ---
+        # test = 0
+        # shapename = 'admin_0_countries'
+        # countries_shp = shpreader.natural_earth(resolution='110m',
+        #                                   category='cultural', name=shapename)
+        # ax.coastlines(resolution='110m', color='grey', linewidth=0.3)
+        # ax.add_feature(cfeature.BORDERS, facecolor='none', edgecolor='k', linewidth=0.2)
+        # ax.add_feature(cfeature.LAKES, facecolor='#BAECFA', linewidth=0.2)
+        # ax.add_feature(cfeature.OCEAN, facecolor='#75DEFC')
+        # ax.outline_patch.set_visible(False)
 
-        for country in shpreader.Reader(countries_shp).records():
-            nome = country.attributes['NAME_LONG']
-            if nome in unique_pais:
-                i = unique_pais.index(nome)
-                numero = c_numero[i]
-                ax.add_geometries(country.geometry, ccrs.PlateCarree(),
-                                  facecolor=cmap(numero / float(maximo), 1),
-                                  label=nome)
-                test = test + 1
-            else:
-                ax.add_geometries(country.geometry, ccrs.PlateCarree(),
-                                  facecolor='#FAFAFA',
-                                  label=nome)
-        if test != len(unique_pais):
-            raise Exception("check the way you are writting your country names!")
+        # for country in shpreader.Reader(countries_shp).records():
+        #     nome = country.attributes['NAME_LONG']
+        #     if nome in unique_pais:
+        #         i = unique_pais.index(nome)
+        #         numero = c_numero[i]
+        #         ax.add_geometries(country.geometry, ccrs.PlateCarree(),
+        #                           facecolor=cmap(numero / float(maximo), 1),
+        #                           label=nome)
+        #         test = test + 1
+        #     else:
+        #         ax.add_geometries(country.geometry, ccrs.PlateCarree(),
+        #                           facecolor='#FAFAFA',
+        #                           label=nome)
+        # if test != len(unique_pais):
+        #     raise Exception("check the way you are writting your country names!")
 
-        plt.savefig(os.path.join(self.fig_path, 'heatmap.png'), bbox_inches='tight', dpi=400)
-        plt.close("all")
+        # plt.savefig(os.path.join(self.fig_path, 'heatmap.png'), bbox_inches='tight', dpi=400)
+        # plt.close("all")
         # return ax
         return cty_count
 
