@@ -24,7 +24,7 @@ def search(query):
 	qfilter = query;
 	# free text
 	if qfilter['query']:
-		solr +=  '&q='+qfilter['query']
+		solr +=  '&q='+urllib.parse.quote(qfilter['query'])
 	else:
 		solr +=  '&q=*'
 
