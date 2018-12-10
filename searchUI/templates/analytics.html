@@ -31,8 +31,42 @@ function drawPie() {
   <img src="/static/figs/density.png" alt="sentimentSpread" width="600px">
 {% endif %}
 
+<script>
+google.charts.load('current', {packages: ['corechart', 'bar']});
+google.charts.setOnLoadCallback(drawBasic);
 
+function drawBasic() {
+      var topic = JSON.parse('{{ analytics['topic_count'] | tojson | safe }}')
+      var data = google.visualization.arrayToDataTable([
+        ['Topic', 'Tweets',],
+        ['Politics', topic['politics']],
+        ['Crime', topic['crime']],
+        ['Environment', topic['environment']],
+        ['Social Unrest', topic['social unrest']],
+        ['Infrastructure', topic['infra']]
+      ]);
 
+      var options = {
+        title: 'Number of Tweets in Each Topic',
+        chartArea: {width: '50%'},
+        hAxis: {
+          title: 'Tweets',
+          minValue: 0
+        },
+        vAxis: {
+          title: 'Topic'
+        }
+        ,height: 250
+        ,width: 450
+      };
+
+      var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+
+      chart.draw(data, options);
+    }
+</script>
+
+<div id="chart_div" style="width: 500px; height: 300px;"></div>
 
 <script>
 google.charts.load('current', {

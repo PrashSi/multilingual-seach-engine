@@ -54,19 +54,25 @@ def search():
     date_e = formatDate(request.form['date_f2'])
     #~~~~~~~~~~~~~~~~~~~~~ query solr ~~~~~~~~~~~~~~~~~~~~~#
     filters = {'query': query, 'lang_f': lang, 'topic_f': topic, 
-            'city_f': city, 'date_f1': date_s, 'date_f2': date_e, 'start': '0', 'rows': '10000'}
+            'city_f': city, 'date_f1': date_s, 'date_f2': date_e, 'start': '0', 'rows': '5000'}
     results = fetch_results.search(filters)
 
-    analytics = {'pie_data': '', 'country': '', 'hashtags': ['trump', 'test']}
     #~~~~~~~~~~~~~~~~~~~~~ analytics ~~~~~~~~~~~~~~~~~~~~~#
     if results['numFound'] > 0:
         visual = all_in_one.visualize(results['docs'], 'static/figs')
         # hashtags = ['trump', 'test']
         hashtags = visual.tagcloud()
         pie_data = visual.sentiment()
+        # timeline = visual.timeline()
+        topic_data = visual.topics_item
         # country = {'Germany': 100, 'United_States': 800, 'Brazil': 400, 'Canada': 500, 'RU': 1000}
         country = visual.setMap()
-        analytics = {'pie_data': pie_data, 'country': country, 'hashtags': hashtags}
+        analytics = {'pie_data': pie_data, 'country': country, 'hashtags': hashtags, 'topic_count': topic_data}
+    else:
+        analytics = {'pie_data': {'pos': 0, 'neg':0, 'neu':0}, 
+                    'country': {'United States': 0, 'Mexico': 0, 'France': 0, 'Thailand': 0, 'India': 0},
+                     'hashtags': [], 
+                     'topic_count': {'politics': 0, 'environment': 0, 'crime':0, 'social unrest': 0, 'infra': 0}}
 
     return render_template("search.html", query=query, filters=filters, 
                             results=results['docs'], analytics=analytics, sp_corr=spelling(query))

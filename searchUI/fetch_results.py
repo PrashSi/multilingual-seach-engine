@@ -13,7 +13,8 @@ fq = '' # advance filters
 def search(query):
 
 	# solr = 'http://18.222.230.12:8984/solr/IRF18P1/select?wt=json'
-	solr = 'http://128.205.39.134:8983/solr/gettingstarted/select?wt=json'
+	# solr = 'http://128.205.39.134:8983/solr/gettingstarted/select?wt=json'
+	solr = 'http://18.222.230.12:8983/solr/IRF18P1/select?wt=json'
 
 	month_first = True
 	# fl = 'id tweet_lang source tweet_text topic city text tweet_date hashtags'

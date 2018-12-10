@@ -22,6 +22,10 @@ select {
   margin-top: 20px;
 }
 
+.chart_div {
+  margin-right: 0px;
+}
+
 .active {
   background: rgba(255,255,255,1);
   border-left: 1px solid #ddd;

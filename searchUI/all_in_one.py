@@ -13,47 +13,52 @@ class visualize:
         self.json_file = json_file
         self.labels = 'Positive', 'Negative', 'Neutral'
         self.date_format = "%Y-%m-%d"
-        self.topics_item = {'infra': 0, 'environment': 1, 'crime': 2, 'politics': 3, 'social unrest': 4}
+        self.topics_item = {'infra': 0, 'environment': 0, 'crime': 0, 'politics': 0, 'social unrest': 0}
         self.fig_path = os.path.join(os.getcwd(), fig_path)
         if not os.path.isdir(self.fig_path):
             os.makedirs(self.fig_path)
         # self.fig = plt.figure(figsize=(30, 10))
         # plt.tight_layout()
 
-    def timeline(self):
-        timetable = np.zeros((5, 15))
+    # def timeline(self):
+    #     timetable = np.zeros((5, 15))
 
-        start = datetime.strptime('2018-09-01', self.date_format)
+    #     start = datetime.strptime('2018-09-01', self.date_format)
+    #     l = []
+    #     for tweet in self.json_file:
+    #         date = tweet['tweet_date'][0][:10]
+    #         end = datetime.strptime(date, self.date_format)
+    #         l.append(end)
+    #     start = min(l)
+    #     # with open(self.json_file) as f:
+    #     for tweet in self.json_file:
+    #         # tweets = json.loads(lines)
 
-        # with open(self.json_file) as f:
-        for tweet in self.json_file:
-            # tweets = json.loads(lines)
+    #         # for tweet in tweets:
+    #         date = tweet['tweet_date'][0][:10]
+    #         end = datetime.strptime(date, self.date_format)
+    #         week = (end - start).days // 7
+    #         topic = tweet['topic'][0]
+    #         row = self.topics_item[topic]
+    #         timetable[row, week] = timetable[row, week] + 1
 
-            # for tweet in tweets:
-            date = tweet['tweet_date'][:10]
-            end = datetime.strptime(date, self.date_format)
-            week = (end - start).days // 7
-            topic = tweet['topic']
-            row = self.topics_item[topic]
-            timetable[row, week] = timetable[row, week] + 1
+    #     N = timetable.shape[1]
+    #     ind = np.arange(N)
+    #     width = 0.4
+    #     # ax = self.fig.add_subplot(231)
+    #     fig = plt.figure()
+    #     ax = fig.add_subplot(111)
+    #     p = [ax.bar(ind, timetable[0], width)[0]]
+    #     for i in range(4):
+    #         p.append(plt.bar(ind, timetable[i + 1], width, bottom=np.sum(timetable[0:i + 1], axis=0))[0])
 
-        N = timetable.shape[1]
-        ind = np.arange(N)
-        width = 0.4
-        # ax = self.fig.add_subplot(231)
-        fig = plt.figure()
-        ax = fig.add_subplot(111)
-        p = [ax.bar(ind, timetable[0], width)[0]]
-        for i in range(4):
-            p.append(plt.bar(ind, timetable[i + 1], width, bottom=np.sum(timetable[0:i + 1], axis=0))[0])
-
-        ax.set_ylabel('Topic Counts', fontsize=10)
-        ax.set_xlabel('Week Range \n (From 2018-09-01 To 2018-11-30)', fontsize=10)
-        ax.set_title('Topic Timeline', fontsize=15)
-        ax.set_xticks(ind, range(1, N + 1))
-        ax.set_yticks(np.arange(0, np.max(timetable) + 2))
-        ax.legend(p, list(self.topics_item.keys()), loc=0)
-        plt.savefig(os.path.join(self.fig_path, 'timeline.png'), dpi=500, bbox_inches='tight')
+    #     ax.set_ylabel('Topic Counts', fontsize=10)
+    #     ax.set_xlabel('Week Range \n (From ' + '{:%Y-%m-%d}'.format(start) + ' To ' + '{:%Y-%m-%d}'.format(end) + ')', fontsize=10)
+    #     ax.set_title('Topic Timeline', fontsize=15)
+    #     ax.set_xticks(ind, range(1, N + 1))
+    #     ax.set_yticks(np.arange(0, np.max(timetable) + 2))
+    #     ax.legend(p, list(self.topics_item.keys()), loc=0)
+    #     plt.savefig(os.path.join(self.fig_path, 'timeline.png'), dpi=500, bbox_inches='tight')
 
         # return ax
 
@@ -79,6 +84,7 @@ class visualize:
         #     lines = f.readlines()[0]
         #     tweets = json.loads(lines)
         for tweet in self.json_file:
+            self.topics_item[tweet['topic'][0]] += 1
             k = 'text_' + tweet['tweet_lang'][0]
             if k in tweet:
                 text = text + tweet[k][0]
@@ -109,7 +115,7 @@ class visualize:
         neuCount = 0
         for tweet in self.json_file:
             # score.append(tweet['score'])
-            score.append(tweet['sentiment'])
+            score.append(tweet['sentiment'][0])
             count += 1
             # if count > 50:
             #     break
@@ -120,10 +126,10 @@ class visualize:
             # parsed_tweet['sentiment'] = tweet['sentiment']
             # parsed_tweet['score'] = np.random.normal(0, 1, (1, ))
 
-            if tweet['sentiment'] > 0:
+            if tweet['sentiment'][0] > 0:
                 # parsed_tweet['sentiment'] = 'positive'
                 pcount += 1
-            elif tweet['sentiment'] < 0:
+            elif tweet['sentiment'][0] < 0:
                 # parsed_tweet['sentiment'] = 'negative'
                 ncount += 1
             else:
