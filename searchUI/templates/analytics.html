@@ -48,7 +48,7 @@ function drawBasic() {
 
       var options = {
         title: 'Number of Tweets in Each Topic',
-        chartArea: {width: '50%'},
+        chartArea: {width: '60%'},
         hAxis: {
           title: 'Tweets',
           minValue: 0
@@ -56,17 +56,17 @@ function drawBasic() {
         vAxis: {
           title: 'Topic'
         }
-        ,height: 250
-        ,width: 450
+        ,height: 300
+        ,width: 500
       };
 
-      var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+      var chart = new google.visualization.BarChart(document.getElementById('chart_bar'));
 
       chart.draw(data, options);
     }
 </script>
 
-<div id="chart_div" style="width: 500px; height: 300px;"></div>
+<div id="chart_bar" style="width: 500px; height: 300px;"></div>
 
 <script>
 google.charts.load('current', {
