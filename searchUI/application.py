@@ -9,7 +9,6 @@ from textblob import TextBlob
 import fetch_results
 
 app = Flask(__name__)
-app.run(host='0.0.0.0' , port=5000)
 
 def spelling(input):
     b = TextBlob(input)
