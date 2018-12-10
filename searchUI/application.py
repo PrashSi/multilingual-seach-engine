@@ -87,8 +87,8 @@ def errorhandler(error):
 for code in default_exceptions:
     app.errorhandler(code)(errorhandler)
 
-
-
+if __name__ == '__main__':
+    app.run(host='172.31.36.52' , port=5000)
 
 
 
