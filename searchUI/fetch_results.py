@@ -34,7 +34,7 @@ def search(query):
 		solr +=  '&fq=topic:' + qfilter['topic_f']
 
 	if qfilter['city_f']:
-		solr +=  '&fq=city:' + qfilter['city_f']
+		solr +=  '&fq=country:' + qfilter['city_f']
 
 	if qfilter['lang_f']:
 		solr +=  '&fq=tweet_lang:' + qfilter['lang_f']
