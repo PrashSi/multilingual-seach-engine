@@ -1,5 +1,5 @@
 <form action="{{url_for('search')}}" id="form" action="." method="POST">
-	{% if filters['lang_f'] == "" %}
+	<!-- {% if filters['lang_f'] == "" %}
 		{% set lang_f = "Language" %}
 	{% endif %}
 
@@ -17,7 +17,7 @@
 
 	{% if filters['facet_f'] == "" %}
 		{% set facet_f = "Facet" %}
-	{% endif %}
+	{% endif %} -->
 
 	<select name="lang_f">
 	  <option value="" selected disabled hidden>Language</option>
@@ -121,6 +121,18 @@
 		<input type="date" name="date_f2">
 	</div>
 	<br><br>
+
+	{% if filters['lang_f'] == "Language" %}
+		{% set lang_f = "*" %}
+	{% endif %}
+
+	{% if filters['topic_f'] == "Topic" %}
+		{% set topic_f = "*" %}
+	{% endif %}
+
+	{% if filters['city_f'] == "City" %}
+		{% set city_f = "*" %}
+	{% endif %}
 
 	<input type="hidden" name="lang_f" value="{{ lang_f }}">
 	<input type="hidden" name="topic_f" value="{{ topic_f }}">

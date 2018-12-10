@@ -46,8 +46,14 @@ def search():
     #~~~~~~~~~~~~~~~~~~~~~ get from user ~~~~~~~~~~~~~~~~~~~~~#
     query = request.form['key_word']
     lang = request.form['lang_f']
+    if lang == "Language":
+        lang = '*'
     topic = request.form['topic_f']
+    if topic == "Topic":
+        topic = '*'
     city = request.form['city_f']
+    if city == 'City':
+        city = '*'
     date_s = formatDate(request.form['date_f1'])
     if date_s == 'NOW':
         date_s = '*'
@@ -88,7 +94,7 @@ for code in default_exceptions:
     app.errorhandler(code)(errorhandler)
 
 if __name__ == '__main__':
-    app.run(host='172.31.36.52' , port=5000)
+    app.run(host='192.168.0.7')
 
 
 
