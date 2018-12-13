@@ -94,7 +94,7 @@ for code in default_exceptions:
     app.errorhandler(code)(errorhandler)
 
 if __name__ == '__main__':
-    app.run(host='192.168.0.7')
+    app.run(host='0.0.0.0', port=8984)
 
 
 
