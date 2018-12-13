@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 
 
@@ -55,7 +56,7 @@ def search(query):
 	
 	print (solr)
 	result = urllib.request.urlopen(solr)
-
+	result = result.read().decode('utf-8')
 	data =  json.load(result)['response']	
 	return data
 
